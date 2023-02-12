@@ -59,22 +59,21 @@ int main(int argc, char* argv[])
 
     if (argc != 5)
     {
-        cout << "Неверное количество аргументов.\n" 
-            "Формат ввода должен быть такой:\n"
-            "replace.exe <input file> <output file> <search string> <replace string>";
+        cout << "Invalid argument count\n"
+            << "Usage: replace.exe <inputFile> <outputFile> <searchString> <replacementString>\n";
         return 1;
     }
 
     ifstream fIn(argv[1]);
     if (!fIn.is_open()) {
-        cout << "Произошла ошибка открытия входного файла";
+        cout << "An error occurred opening the input file.\nTry again.";
         return 1;
     }
 
     ofstream fOut(argv[2]);
     if (!fOut.is_open()) 
     {
-        cout << "Произошла ошибка открытия выходного файла";
+        cout << "An error occurred opening the output file.\nTry again.";
         return 1;
     }
 

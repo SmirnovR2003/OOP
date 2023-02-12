@@ -26,7 +26,7 @@ void FlipByte(string binaryNumber) {
         if (binaryNumber[i] == '1')   // если i-й бит в строке = 1 ,
             number += pow(2, binaryNumber.size() - i - 1);
 
-    cout << number;
+    cout << number << endl;
 }
 
 int main(int argc, char* argv[])
@@ -34,17 +34,20 @@ int main(int argc, char* argv[])
 
     if (argc != 2)
     {
-        cout << "Неверное количество аргументов.\n"
-            "Формат ввода должен быть такой:\n"
-            "flipbyte.exe <byte>";
+        cout << "Invalid argument count\n"
+            << "Usage: replace.exe <inputFile> <outputFile> <searchString> <replacementString>\n";
         return 1;
     }
 
+    if (argv[1][0] < '0' || argv[1][0] > '9') {
+        cout << "Invalid argument\n Enter number from 0 to 255\n";
+        return 1;
+    }
 
     int number = stoi(argv[1]);
 
     if (number < 0 || number > 255) {
-        cout << "Произошла ошибка открытия входного файла";
+        cout << "Invalid argument\n Enter number from 0 to 255\n";
         return 1;
     }
 

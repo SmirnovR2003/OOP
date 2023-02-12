@@ -1,3 +1,20 @@
 ﻿  flipbyte.cpp
 C:\roman\C++\OOP\flipbyte\flipbyte\flipbyte.cpp(27,26): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
   flipbyte.vcxproj -> C:\roman\C++\OOP\flipbyte\x64\Debug\flipbyte.exe
+  Running tests
+  Invalid argument
+   Enter number from 0 to 255
+  Invalid argument
+   Enter number from 0 to 255
+  Invalid argument
+   Enter number from 0 to 255
+  96
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и 6-OUT.TXT
+  ***** C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt
+  ***** 6-OUT.TXT
+  96
+  *****
+  
+  Program testing failed
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: выход из команды "test.bat "C:\roman\C++\OOP\flipbyte\x64\Debug\flipbyte.exe"
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: :VCEnd" с кодом 1.

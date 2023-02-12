@@ -13,10 +13,32 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="test-data">
+      <UniqueIdentifier>{8946fa4f-894f-4c42-a131-b887e7d23826}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="flipbyte.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.bat">
+      <Filter>Исходные файлы</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="0-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="6-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="1-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="255.txt">
+      <Filter>test-data</Filter>
+    </Text>
   </ItemGroup>
 </Project>
