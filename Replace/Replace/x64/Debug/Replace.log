@@ -1,0 +1,8 @@
+﻿  Replace.cpp
+C:\roman\C++\OOP\Replace\Replace\Replace.cpp(20,55): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  Replace.vcxproj -> C:\roman\C++\OOP\Replace\x64\Debug\Replace.exe
+  Running Tests
+  121332121332121332121332Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и 12312312345-OUT.TXT
+  FC: различия не найдены
+  
+  All tests passed
