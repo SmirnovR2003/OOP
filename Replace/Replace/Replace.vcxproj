@@ -171,6 +171,10 @@
   <ItemGroup>
     <Text Include="12312312345-out.txt" />
     <Text Include="12312312345.txt" />
+    <Text Include="Empty-out.txt" />
+    <Text Include="Empty.txt" />
+    <Text Include="mama-out.txt" />
+    <Text Include="mama.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

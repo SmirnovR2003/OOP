@@ -1,0 +1,3 @@
+﻿  flipbyte.cpp
+C:\roman\C++\OOP\flipbyte\flipbyte\flipbyte.cpp(27,26): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+  flipbyte.vcxproj -> C:\roman\C++\OOP\flipbyte\x64\Debug\flipbyte.exe

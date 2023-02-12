@@ -34,5 +34,17 @@
     <Text Include="12312312345-out.txt">
       <Filter>test-data</Filter>
     </Text>
+    <Text Include="mama.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="mama-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="Empty.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="Empty-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
   </ItemGroup>
 </Project>

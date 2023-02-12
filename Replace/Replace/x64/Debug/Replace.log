@@ -5,4 +5,10 @@ C:\roman\C++\OOP\Replace\Replace\Replace.cpp(20,55): warning C4267: инициа
   121332121332121332121332Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и 12312312345-OUT.TXT
   FC: различия не найдены
   
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и MAMA-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и EMPTY-OUT.TXT
+  FC: различия не найдены
+  
   All tests passed
