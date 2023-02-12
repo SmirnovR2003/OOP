@@ -37,7 +37,7 @@
     <Text Include="1-out.txt">
       <Filter>test-data</Filter>
     </Text>
-    <Text Include="255.txt">
+    <Text Include="255-out.txt">
       <Filter>test-data</Filter>
     </Text>
   </ItemGroup>

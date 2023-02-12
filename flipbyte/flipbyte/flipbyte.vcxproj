@@ -171,7 +171,7 @@
   <ItemGroup>
     <Text Include="0-out.txt" />
     <Text Include="1-out.txt" />
-    <Text Include="255.txt" />
+    <Text Include="255-out.txt" />
     <Text Include="6-out.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

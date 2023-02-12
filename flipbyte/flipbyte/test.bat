@@ -16,17 +16,17 @@ if NOT ERRORLEVEL 1 goto err
 %PROGRAM% abc
 if NOT ERRORLEVEL 1 goto err
 
-goto ok
-%Program% 6 || goto err
+
+%Program% 6 > %OUT%|| goto err
 fc %OUT% 6-out.txt || goto err
 
-%Program% 0 || goto err
+%Program% 0 > %OUT%|| goto err
 fc %OUT% 0-out.txt || goto err
 
-%Program% 1 || goto err
-fc %OUT% 128-out.txt || goto err
+%Program% 1 > %OUT%|| goto err
+fc %OUT% 1-out.txt || goto err
 
-%Program% 255 || goto err
+%Program% 255 > %OUT%|| goto err
 fc %OUT% 255-out.txt || goto err
 
 :ok
