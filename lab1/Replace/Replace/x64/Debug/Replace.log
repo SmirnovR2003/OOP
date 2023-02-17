@@ -1,0 +1,23 @@
+﻿  Replace.cpp
+  Replace.vcxproj -> C:\roman\C++\OOP\Replace\x64\Debug\Replace.exe
+  Running Tests
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и 12312312345-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и MAMA-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и EMPTY-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и WITHOUTREPLACES-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и WITHOUTREPLACES-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и WITHOUTREPLACES-OUT.TXT
+  FC: различия не найдены
+  
+  An error occurred opening the output file.
+  Try again.All tests passed
