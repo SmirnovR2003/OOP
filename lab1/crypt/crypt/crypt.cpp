@@ -87,8 +87,15 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    if (argv[4][0] < '0' || argv[4][0] > '9')
+    {
+        cout << "Invalid argument\nEnter number from 0 to 255\n";
+        return 1;
+    }
+
     int key;
-    if (!(key = stoi(argv[4])) || key <= 0 || key >= 255)
+    key = stoi(argv[4]);
+    if (key < 0 || key > 255)
     {
         cout << "Invalid key\nEnter number from 0 to 255\nTry again.\n";
         return 1;

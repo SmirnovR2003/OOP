@@ -8,6 +8,9 @@ if NOT ERRORLEVEL 1 goto err
 %PROGRAM% crypt crypt.exe crypted.exe 256
 if NOT ERRORLEVEL 1 goto err
 
+%PROGRAM% crypt crypt.exe crypted.exe asd
+if NOT ERRORLEVEL 1 goto err
+
 %PROGRAM% cdrypt crypt.exe crypted.exe 25
 if NOT ERRORLEVEL 1 goto err
 
