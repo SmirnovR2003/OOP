@@ -1,0 +1,47 @@
+﻿  fill.cpp
+  fill.vcxproj -> C:\roman\C++\OOP\lab1\fill\x64\Debug\fill.exe
+  Running tests
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и FILLWITHBARRIER-OUT.TXT
+  ***** C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt
+                                                                                                      
+                                                                                                      
+      ################                                                                                
+     #...............#                                                                                
+     #......#####...#                                                                                 
+     #...O..#   #...###                                                                               
+     #......#   #.....#                                                                               
+      #######   #######                                                                               
+                                                                                                      
+                    ###                                                                               
+          #######   # #                                                                               
+          #.....#   #  ##                                                                             
+          #..O..#  #     #                                                                            
+          #.....#  ######                                                                             
+          #######                                                                                     
+                                                                                                      
+                                                                                                      
+                                                                                                      
+  ***** FILLWITHBARRIER-OUT.TXT
+  
+  
+      ################
+     #...............#
+     #......#####...#
+     #...O..#   #...###
+     #......#   #.....#
+      #######   #######
+  
+                    ###
+          #######   # #
+          #.....#   #  ##
+          #..O..#  #     #
+          #.....#  ######
+          #######
+  
+  
+  
+  *****
+  
+  Program testing failed
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: выход из команды "test.bat C:\roman\C++\OOP\lab1\fill\x64\Debug\fill.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: :VCEnd" с кодом 1.
