@@ -1,0 +1,13 @@
+﻿  invertt.cpp
+  invertt.vcxproj -> C:\roman\C++\OOP\lab1\invertt\x64\Debug\invertt.exe
+  Running tests
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и TESTMATRIX-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и TESTMATRIX1-OUT.TXT
+  FC: различия не найдены
+  
+  Сравнение файлов C:\USERS\4CFA~1\APPDATA\LOCAL\TEMP\out.txt и TESTMATRIX2-OUT.TXT
+  FC: различия не найдены
+  
+  All tests passed
