@@ -10,6 +10,9 @@ if NOT ERRORLEVEL 1 goto err
 %Program% unCorrectMatrix.txt > %OUT% 
 if NOT ERRORLEVEL 1 goto err
 
+%Program% matrixWithZeroDeterminant.txt > %OUT% 
+if NOT ERRORLEVEL 1 goto err
+
 %Program% testMatrix.txt > %OUT%  || goto err
 fc %OUT% testMatrix-out.txt || goto err
 

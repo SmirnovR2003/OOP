@@ -8,25 +8,42 @@ using namespace std;
 
 const int matrixSize = 3;
 
-void writeMatrix(double matrix[3][3]) 
+void WriteMatrix(double matrix[3][3]) 
 {
-
     for (int i = 0; i < matrixSize; i++)
     {
         cout << matrix[i][0] << " " << matrix[i][1] << " " << matrix[i][2] << endl;
     }
 }
 
-void invertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
+void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
 {
     // приводим к единице matrix[0][0], обнуляем matrix[1][0] и matrix[2][0] 
     // и проводим соответствующие действия с остальными элементами матрицы
 #pragma region FirstStep 
 
+    if (matrix[0][0] == 0)
+    {
+        if (matrix[1][0] != 0)
+        {
+            for (int i = 0; i < matrixSize; i++) 
+            {
+                swap(matrix[0][i], matrix[1][i]);
+                swap(invertedMatrix[0][i], invertedMatrix[1][i]);
+            }
+        }
+        else 
+        {
+            for (int i = 0; i < matrixSize; i++)
+            {
+                swap(matrix[0][i], matrix[2][i]);
+                swap(invertedMatrix[0][i], invertedMatrix[2][i]);
+            }
+        }
+    }
     double divider1 = matrix[0][0];
     double divider2 = matrix[1][0];
     double divider3 = matrix[2][0];
-
 
     for (int i = 0; i < matrixSize; i++)
     {
@@ -45,6 +62,14 @@ void invertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
     // и проводим соответствующие действия с остальными элементами матрицы
 #pragma region SecondStep
 
+    if (matrix[1][1] == 0)
+    {
+        for (int i = 0; i < matrixSize; i++)
+        {
+            swap(matrix[1][i], matrix[2][i]);
+            swap(invertedMatrix[1][i], invertedMatrix[2][i]);
+        }
+    }
 
     divider1 = matrix[0][1];
     divider2 = matrix[1][1];
@@ -52,7 +77,6 @@ void invertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
 
     for (int i = 0; i < matrixSize; i++)
     {
-
         matrix[1][i] /= divider2;
         invertedMatrix[1][i] /= divider2;
 
@@ -89,7 +113,8 @@ void invertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
 #pragma endregion
 }
 
-int ReadMatrix(ifstream& fIn, double(&matrix)[3][3]) {
+int ReadMatrix(ifstream& fIn, double(&matrix)[3][3]) 
+{
 
     for (int i = 0; i < matrixSize; i++)
     {
@@ -102,6 +127,16 @@ int ReadMatrix(ifstream& fIn, double(&matrix)[3][3]) {
         }
     }
     return 0;
+}
+
+double FindMatrixDeterminant(double(&matrix)[3][3])
+{
+    return(matrix[0][0] * matrix[1][1] * matrix[2][2] +
+        matrix[0][1] * matrix[1][2] * matrix[2][0] +
+        matrix[0][2] * matrix[1][0] * matrix[2][1] -
+        matrix[0][2] * matrix[1][1] * matrix[2][0] -
+        matrix[0][1] * matrix[1][0] * matrix[2][2] - 
+        matrix[0][0] * matrix[1][2] * matrix[2][1]);
 }
 
 int main(int argc, char* argv[])
@@ -131,6 +166,12 @@ int main(int argc, char* argv[])
         cout << "Matrix reading error.\nCheck matrix in input file and try again.";
         return 1;
     }
+
+    if (FindMatrixDeterminant(matrix) == 0)
+    {
+        cout << "It is impossible to find the inverse matrix since the determinant of the matrix is zero\n";
+        return 1;
+    }
     //создаем единичную матрицу
     double invertedMatrix[3][3]
     {
@@ -139,6 +180,6 @@ int main(int argc, char* argv[])
         {0, 0, 1}
     };
 
-    invertMatrix(matrix, invertedMatrix);
-    writeMatrix(invertedMatrix);
+    InvertMatrix(matrix, invertedMatrix);
+    WriteMatrix(invertedMatrix);
 }

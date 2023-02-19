@@ -169,6 +169,7 @@
     <None Include="test.bat" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="matrixWithZeroDeterminant.txt" />
     <Text Include="testMatrix-out.txt" />
     <Text Include="testMatrix.txt" />
     <Text Include="testMatrix1-out.txt" />

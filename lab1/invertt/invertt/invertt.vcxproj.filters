@@ -49,5 +49,8 @@
     <Text Include="unCorrectMatrix.txt">
       <Filter>test_data</Filter>
     </Text>
+    <Text Include="matrixWithZeroDeterminant.txt">
+      <Filter>test_data</Filter>
+    </Text>
   </ItemGroup>
 </Project>
