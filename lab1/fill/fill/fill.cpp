@@ -12,6 +12,7 @@
 using namespace std;
 
 const int fieldSize = 100;
+//объявить с помощью std::array
 const int fieldWithИarriersSize = fieldSize + 2;
 
 void InitField(char(&field)[fieldWithИarriersSize][fieldWithИarriersSize])
@@ -33,33 +34,44 @@ void InitField(char(&field)[fieldWithИarriersSize][fieldWithИarriersSize])
 	}
 }
 
-void ReadField(ifstream& fIn, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], int& lowerSymbol, vector<pair<int, int>>& positions)
+//заменить ifstream на istream
+
+//обзвать lowerSymbol
+//иннициализировать входные параметры
+// ввести структуру point
+void ReadField(ifstream& fIn, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], int& lowerSymbol, vector<pair<int, int>>& startFillPositions)
 {
 	char symbol;
 	for (int i = 1; i < fieldWithИarriersSize - 1; i++)
 	{
 		for (int j = 1; j < fieldWithИarriersSize - 1; j++)
 		{
-			if(fIn.get(symbol))
-				lowerSymbol = i;
+			if (!fIn.get(symbol))break;
 			if (symbol != '\n')
 			{
 				field[i][j] = symbol;
 				if (symbol == 'O')
 				{
-					positions.push_back({ i, j });
+					startFillPositions.push_back({ i, j });
 				}
 			}
 			else
 			{
+				lowerSymbol = i;
 				break;
 			}
 		}
 	}
 }
 
-void WriteField(ofstream& fOut, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], int& lowerSymbol)
+
+void WriteField(ofstream& fOut, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], int lowerSymbol)
 {
+	if (lowerSymbol == 0)
+	{
+		fOut << "\n";
+		return;
+	}
 	for (int i = 1; i < fieldWithИarriersSize - 1; i++)
 	{
 		for (int j = 1; j < fieldWithИarriersSize - 1; j++)
@@ -75,16 +87,15 @@ void WriteField(ofstream& fOut, char(&field)[fieldWithИarriersSize][fieldWithИ
 }
 
 
-void FillField(ofstream &fOut, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], vector<pair<int, int>> positions, int& loweerSymbol)
+void FillField(ofstream &fOut, char(&field)[fieldWithИarriersSize][fieldWithИarriersSize], vector<pair<int, int>> const & startFillPositions, int& loweerSymbol)
 {
-	int a = 100;
-	for (auto& position : positions)
+	for (auto& startFillPosition : startFillPositions)
 	{
-		queue <pair<int, int>> q;
-		q.push({ position.first + 1, position.second });
-		q.push({ position.first - 1, position.second });
-		q.push({ position.first, position.second + 1 });
-		q.push({ position.first, position.second - 1 });
+		queue <pair<int, int>> q;//структура point
+		q.push({ startFillPosition.first + 1, startFillPosition.second });
+		q.push({ startFillPosition.first - 1, startFillPosition.second });
+		q.push({ startFillPosition.first, startFillPosition.second + 1 });
+		q.push({ startFillPosition.first, startFillPosition.second - 1 });
 		pair<int, int> cell;
 		while (!q.empty())
 		{
@@ -92,6 +103,7 @@ void FillField(ofstream &fOut, char(&field)[fieldWithИarriersSize][fieldWithИa
 			q.pop();
 			if (field[cell.first][cell.second] == ' ') {
 				field[cell.first][cell.second] = '.';
+				//дублирование кода
 				q.push({ cell.first + 1, cell.second });
 				q.push({ cell.first - 1, cell.second });
 				q.push({ cell.first, cell.second + 1 });
@@ -110,7 +122,7 @@ int main(int argc, char* argv[])
 			<< "Usage: fill.exe <inputFile> <outputFile>\n";
 		return 1;
 	}
-
+	//создать функцию для открывания файлов
 	ifstream fIn(argv[1]);
 	if (!fIn.is_open())
 	{
@@ -126,14 +138,14 @@ int main(int argc, char* argv[])
 	}
 
 	char field[fieldWithИarriersSize][fieldWithИarriersSize]{};
-	int lowerSymbol = 0;
-	vector<pair<int, int>> positions;
-
 	InitField(field);
 
-	ReadField(fIn, field, lowerSymbol, positions);
+	int lowerSymbol = 0;
+	vector<pair<int, int>> startFillPositions;
 
-	FillField(fOut, field, positions, lowerSymbol);
+	ReadField(fIn, field, lowerSymbol, startFillPositions);
+
+	FillField(fOut, field, startFillPositions, lowerSymbol);
 
 	WriteField(fOut, field, lowerSymbol);
 

@@ -16,23 +16,21 @@ void WriteMatrix(double matrix[3][3])
     }
 }
 
-void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
+void FirstStep(double(&matrix)[3][3], double(&invertedMatrix)[3][3])
 {
     // приводим к единице matrix[0][0], обнуляем matrix[1][0] и matrix[2][0] 
     // и проводим соответствующие действия с остальными элементами матрицы
-#pragma region FirstStep 
-
     if (matrix[0][0] == 0)
     {
         if (matrix[1][0] != 0)
         {
-            for (int i = 0; i < matrixSize; i++) 
+            for (int i = 0; i < matrixSize; i++)
             {
                 swap(matrix[0][i], matrix[1][i]);
                 swap(invertedMatrix[0][i], invertedMatrix[1][i]);
             }
         }
-        else 
+        else
         {
             for (int i = 0; i < matrixSize; i++)
             {
@@ -56,12 +54,12 @@ void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
         matrix[2][i] -= divider3 * matrix[0][i];
         invertedMatrix[2][i] -= divider3 * invertedMatrix[0][i];
     }
-#pragma endregion 
+}
 
+void SecondStep(double(&matrix)[3][3], double(&invertedMatrix)[3][3])
+{
     // приводим к единице matrix[1][1], обнуляем matrix[0][1] и matrix[2][1] 
     // и проводим соответствующие действия с остальными элементами матрицы
-#pragma region SecondStep
-
     if (matrix[1][1] == 0)
     {
         for (int i = 0; i < matrixSize; i++)
@@ -71,9 +69,9 @@ void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
         }
     }
 
-    divider1 = matrix[0][1];
-    divider2 = matrix[1][1];
-    divider3 = matrix[2][1];
+    double divider1 = matrix[0][1];
+    double divider2 = matrix[1][1];
+    double divider3 = matrix[2][1];
 
     for (int i = 0; i < matrixSize; i++)
     {
@@ -86,16 +84,15 @@ void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
         matrix[2][i] -= divider3 * matrix[1][i];
         invertedMatrix[2][i] -= divider3 * invertedMatrix[1][i];
     }
+}
 
-#pragma endregion
-
+void ThirdStep(double(&matrix)[3][3], double(&invertedMatrix)[3][3])
+{
     // приводим к единице matrix[2][2], обнуляем matrix[0][2] и matrix[1][2] 
     // и проводим соответствующие действия с остальными элементами матрицы
-#pragma region ThirdStep
-
-    divider1 = matrix[0][2];
-    divider2 = matrix[1][2];
-    divider3 = matrix[2][2];
+    double divider1 = matrix[0][2];
+    double divider2 = matrix[1][2];
+    double divider3 = matrix[2][2];
 
     for (int i = 0; i < matrixSize; i++)
     {
@@ -107,13 +104,25 @@ void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
 
         matrix[1][i] -= divider2 * matrix[2][i];
         invertedMatrix[1][i] -= divider2 * invertedMatrix[2][i];
-
     }
-
-#pragma endregion
 }
 
-int ReadMatrix(ifstream& fIn, double(&matrix)[3][3]) 
+void InvertMatrix(double (&matrix)[3][3], double (&invertedMatrix)[3][3])
+{
+    // приводим к единице matrix[0][0], обнуляем matrix[1][0] и matrix[2][0] 
+    // и проводим соответствующие действия с остальными элементами матрицы
+    FirstStep(matrix, invertedMatrix);
+
+    // приводим к единице matrix[1][1], обнуляем matrix[0][1] и matrix[2][1] 
+    // и проводим соответствующие действия с остальными элементами матрицы
+    SecondStep(matrix, invertedMatrix);
+
+    // приводим к единице matrix[2][2], обнуляем matrix[0][2] и matrix[1][2] 
+    // и проводим соответствующие действия с остальными элементами матрицы
+    ThirdStep(matrix, invertedMatrix);
+}
+
+int ReadMatrix(istream& fIn, double(&matrix)[3][3]) 
 {
 
     for (int i = 0; i < matrixSize; i++)
@@ -161,7 +170,7 @@ int main(int argc, char* argv[])
         {0, 0, 0}
     };
     //считываем матрицу
-    if(ReadMatrix(fIn, matrix) == 1) 
+    if(ReadMatrix(fIn, matrix)) 
     {
         cout << "Matrix reading error.\nCheck matrix in input file and try again.";
         return 1;
@@ -172,7 +181,7 @@ int main(int argc, char* argv[])
         cout << "It is impossible to find the inverse matrix since the determinant of the matrix is zero\n";
         return 1;
     }
-    //создаем единичную матрицу
+    //создаем единичную матрицу для метода Гаусса
     double invertedMatrix[3][3]
     {
         {1, 0, 0},
@@ -181,5 +190,6 @@ int main(int argc, char* argv[])
     };
 
     InvertMatrix(matrix, invertedMatrix);
+
     WriteMatrix(invertedMatrix);
 }

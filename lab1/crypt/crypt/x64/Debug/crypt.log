@@ -4,10 +4,8 @@
   Invalid key
   Enter number from 0 to 255
   Try again.
-  Invalid argument
-  Enter number from 0 to 255
-  Invalid command
-  Enter command 'crypt' or 'decryot'
+  invalid stoi argumentInvalid command
+  Enter command 'crypt' or 'decryt'
   Try again.
   Сравнение файлов crypted.exe и CRYPTED2.EXE
   FC: различия не найдены

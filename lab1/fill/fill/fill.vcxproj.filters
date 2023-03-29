@@ -40,5 +40,17 @@
     <Text Include="fillWithoutBarrier-out.txt">
       <Filter>test-data</Filter>
     </Text>
+    <Text Include="withoutFill.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="withoutFill-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="Empty.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="Empty-out.txt">
+      <Filter>test-data</Filter>
+    </Text>
   </ItemGroup>
 </Project>

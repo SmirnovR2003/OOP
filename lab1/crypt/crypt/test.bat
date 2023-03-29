@@ -19,7 +19,7 @@ if NOT ERRORLEVEL 1 goto err
 
 %PROGRAM% decrypt crypted.exe decrypted.exe 25 || goto err
 
-"C:\roman\C++\OOP\lab1\crypt\crypt\decrypted.exe" crypt crypt.exe crypted2.exe 25 ||  goto err
+decrypted.exe crypt crypt.exe crypted2.exe 25 ||  goto err
 fc crypted.exe crypted2.exe || goto err
 
 echo All tests passed

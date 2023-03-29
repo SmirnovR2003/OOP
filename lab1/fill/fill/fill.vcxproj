@@ -161,10 +161,14 @@
     <None Include="test.bat" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Empty-out.txt" />
+    <Text Include="Empty.txt" />
     <Text Include="fillWithBarrier-out.txt" />
     <Text Include="fillWithBarrier.txt" />
     <Text Include="fillWithoutBarrier-out.txt" />
     <Text Include="fillWithoutBarrier.txt" />
+    <Text Include="withoutFill-out.txt" />
+    <Text Include="withoutFill.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

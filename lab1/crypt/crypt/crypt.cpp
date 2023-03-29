@@ -7,6 +7,9 @@
 
 using namespace std;
 
+const string CRYPT = "crypt";
+const string DECRYPT = "decrypt";
+
 char MixByte(char& byte)
 {
     char mixedByte = '0';
@@ -41,7 +44,7 @@ char UnMixByte(char& byte)
 
 
 
-void crypt(ifstream& fIn, ofstream& fOut, int key)
+void crypt(istream& fIn, ostream& fOut, int key)
 {
     char byte;
 
@@ -53,7 +56,7 @@ void crypt(ifstream& fIn, ofstream& fOut, int key)
     }
 }
 
-void decrypt(ifstream& fIn, ofstream& fOut, int key)
+void decrypt(istream& fIn, ostream& fOut, int key)
 {
     char byte;
 
@@ -65,12 +68,41 @@ void decrypt(ifstream& fIn, ofstream& fOut, int key)
     }
 }
 
-int main(int argc, char* argv[])
+void ParseArguments(int argc, char* argv[])
 {
     if (argc != 5)
     {
-        cout << "Invalid argument count\n"
-            << "Usage: crypt.exe crypt/decrypt <inputFile> <outputFile> <key>\n";
+        throw runtime_error("Invalid argument count\nUsage: crypt.exe crypt/decrypt <inputFile> <outputFile> <key>\n");
+    }
+
+    int key;
+    if (!(key = stoi(argv[4])))
+    {
+        throw runtime_error("Invalid argument\nEnter number from 0 to 255\n");
+    }
+    if (key < 0 || key > 255)
+    {
+        throw runtime_error("Invalid key\nEnter number from 0 to 255\nTry again.\n");
+    }
+
+    string command = argv[1];
+    if (command != CRYPT && command != DECRYPT)
+    {
+        throw runtime_error("Invalid command\nEnter command 'crypt' or 'decryt'\nTry again.\n");
+    }
+
+}
+
+int main(int argc, char* argv[])
+{
+
+    try
+    {
+        ParseArguments(argc, argv);
+    }
+    catch (const exception ex)
+    {
+        cout << ex.what();
         return 1;
     }
 
@@ -87,33 +119,18 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    if (argv[4][0] < '0' || argv[4][0] > '9')
-    {
-        cout << "Invalid argument\nEnter number from 0 to 255\n";
-        return 1;
-    }
-
     int key;
     key = stoi(argv[4]);
-    if (key < 0 || key > 255)
-    {
-        cout << "Invalid key\nEnter number from 0 to 255\nTry again.\n";
-        return 1;
-    }
-
-    string str = argv[1];
-    if (str == "crypt")
+   
+    string command = argv[1];
+    if (command == CRYPT)
     {
         crypt(fIn, fOut, key);
     }
-    else if(str == "decrypt")
+    else 
     {
         decrypt(fIn, fOut, key);
     }
-    else
-    {
-        cout << "Invalid command\nEnter command 'crypt' or 'decryot'\nTry again.\n";
-        return 1;
-    }
+
     return 0;
 }

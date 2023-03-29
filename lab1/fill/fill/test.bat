@@ -8,11 +8,17 @@ set OUT="%TEMP%\out.txt"
 if NOT ERRORLEVEL 1 goto err
 
 
-::%Program% fillWithBarrier.txt %OUT% || goto err
-::fc %OUT% fillWithBarrier-out.txt || goto err
+%Program% fillWithBarrier.txt %OUT% || goto err
+fc %OUT% fillWithBarrier-out.txt || goto err
 
 %Program% fillWithoutBarrier.txt %OUT% || goto err
 fc %OUT% fillWithoutBarrier-out.txt || goto err
+
+%Program% Empty.txt %OUT% || goto err
+fc %OUT% Empty-out.txt || goto err
+
+%Program% withoutFill.txt %OUT% || goto err
+fc %OUT% withoutFill-out.txt || goto err
 
 echo All tests passed
 exit /B 0
