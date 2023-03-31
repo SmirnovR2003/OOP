@@ -103,7 +103,6 @@ SCENARIO("SetGear and SetSpeed functions tests")
 		REQUIRE(!car.SetSpeed(21));
 		CHECK(!car.SetGear(1));
 
-
 		REQUIRE(car.SetGear(0));
 		REQUIRE(!car.SetGear(-1));
 

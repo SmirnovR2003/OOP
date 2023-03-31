@@ -27,15 +27,112 @@ void ShowCommand()
 	cout << "		gear = 5 -> 50 <= speed <= 150\n";
 }
 
+void InfoCommand(const Car car)
+{
+	cout << "Engine condition: " << (car.IsTurnedOn() ? "On" : "Off") << endl;
+	cout << "Gear is " << car.GetGear() << endl;
+	cout << "Speed is " << car.GetSpeed() << endl;
+	cout << "Direction is " << car.GetDirection() << endl;
+}
+
+void EngineOnCommand(Car car)
+{
+	if (car.TurnOnEngine())
+	{
+		cout << "Engine is on\n";
+	}
+	else
+	{
+		cout << "Error\nTry again\n";
+	}
+}
+
+void EngineOffCommand(Car car)
+{
+	if (car.TurnOffEngine())
+	{
+		cout << "Engine is off\n";
+	}
+	else
+	{
+		cout << "Error\nGear and speed must be zero\n";
+	}
+}
+
+void SetGearCommand(Car car)
+{
+	try
+	{
+		string answer;
+		int intAnswer = 0;
+		getline(cin, answer);
+		intAnswer = stoi(answer);
+		if (!car.SetGear(intAnswer))
+		{
+			if (!car.IsTurnedOn())
+			{
+				cout << "Turn on the engine\n";
+			}
+			else
+			{
+				cout << "Invalid gear\n";
+				cout << "Enter a gear appropriated current speed or switch to the appropriate speed\n";
+			}
+		}
+		else
+		{
+			cout << "The selected gear is set\n";
+		}
+	}
+	catch (exception ex)
+	{
+		cout << "Error reading the gear\n";
+		cout << "Enter a gear from -1 to 5\n";
+	}
+}
+
+void SetSpeedCommand(Car car)
+{
+	try
+	{
+		string answer;
+		int intAnswer = 0;
+		getline(cin, answer);
+		intAnswer = stoi(answer);
+		if (!car.SetSpeed(intAnswer))
+		{
+			if (!car.IsTurnedOn())
+			{
+				cout << "Turn on the engine\n";
+			}
+			else if (pair<int, int> speedLimit = car.GetSpeedsInGear(); intAnswer < speedLimit.first || intAnswer > speedLimit.first)
+			{
+				cout << "Invalid speed\n";
+				cout << "Enter a speed appropriated current gear or switch to the appropriate gear\n";
+			}
+		}
+		else
+		{
+			cout << "The selected speed is set\n";
+		}
+	}
+	catch (exception ex)
+	{
+		cout << "Error reading the speed\n";
+		cout << "Enter a speed appropriated current gear\n";
+	}
+}
+
 int main()
 {
 	Car car;
 	string answer;
-	int intAnswer = 0;
 	ShowCommand();
+
 	cout << ">";
 	cin >> answer;
 	transform(answer.begin(), answer.end(), answer.begin(), [](char ch) { return tolower(ch);});
+
 	while (answer != "Stop")
 	{
 		if (answer == "Help")
@@ -44,90 +141,23 @@ int main()
 		}
 		else if (answer == "Info")
 		{
-			cout << "Engine condition: " << (car.IsTurnedOn() ? "On" : "Off") << endl;
-			cout << "Gear is " << car.GetGear() << endl;
-			cout << "Speed is " << car.GetSpeed() << endl;
-			cout << "Direction is " << car.GetDirection() << endl;
+			InfoCommand(car);
 		}
 		else if (answer == "EngineOn")
 		{
-			if (car.TurnOnEngine())
-			{
-				cout << "Engine is on\n";
-			}
-			else
-			{
-				cout << "Error\nTry again\n";
-			}
+			EngineOnCommand(car);
 		}
 		else if (answer == "EngineOff")
 		{
-			if (car.TurnOffEngine())
-			{
-				cout << "Engine is off\n";
-			}
-			else
-			{
-				cout << "Error\nGear and speed must be zero\n";
-			}
+			EngineOffCommand(car);
 		}
 		else if (answer == "SetGear")
 		{
-			try
-			{
-				getline(cin, answer);
-				intAnswer = stoi(answer);
-				if (!car.SetGear(intAnswer))
-				{
-					if (!car.IsTurnedOn())
-					{
-						cout << "Turn on the engine\n";
-					}
-					else 
-					{
-						cout << "Invalid gear\n";
-						cout << "Enter a gear appropriated current speed or switch to the appropriate speed\n";
-					}
-				}
-				else
-				{
-					cout << "The selected gear is set\n";
-				}
-			}
-			catch (exception ex)
-			{
-				cout << "Error reading the gear\n";
-				cout << "Enter a gear from -1 to 5\n";
-			}
+			SetGearCommand(car);
 		}
 		else if (answer == "SetSpeed")
 		{
-			try
-			{
-				getline(cin, answer);
-				intAnswer = stoi(answer);
-				if (!car.SetSpeed(intAnswer))
-				{
-					if (!car.IsTurnedOn())
-					{
-						cout << "Turn on the engine\n";
-					}
-					else if (pair<int, int> speedLimit = car.GetSpeedsInGear(); intAnswer < speedLimit.first || intAnswer > speedLimit.first)
-					{
-						cout << "Invalid speed\n";
-						cout << "Enter a speed appropriated current gear or switch to the appropriate gear\n";
-					}
-				}
-				else
-				{
-					cout << "The selected speed is set\n";
-				}
-			}
-			catch (exception ex)
-			{
-				cout << "Error reading the speed\n";
-				cout << "Enter a speed appropriated current gear\n";
-			}
+			SetSpeedCommand(car);
 		}
 		else
 		{
