@@ -1,6 +1,4 @@
-﻿// Car.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream>
 #include "Car.h"
 #include <windows.h>
@@ -133,29 +131,29 @@ int main()
 	cin >> answer;
 	transform(answer.begin(), answer.end(), answer.begin(), [](char ch) { return tolower(ch);});
 
-	while (answer != "Stop")
+	while (answer != "stop")
 	{
-		if (answer == "Help")
+		if (answer == "help")
 		{
 			ShowCommand();
 		}
-		else if (answer == "Info")
+		else if (answer == "info")
 		{
 			InfoCommand(car);
 		}
-		else if (answer == "EngineOn")
+		else if (answer == "engineon")
 		{
 			EngineOnCommand(car);
 		}
-		else if (answer == "EngineOff")
+		else if (answer == "engineoff")
 		{
 			EngineOffCommand(car);
 		}
-		else if (answer == "SetGear")
+		else if (answer == "setgear")
 		{
 			SetGearCommand(car);
 		}
-		else if (answer == "SetSpeed")
+		else if (answer == "setspeed")
 		{
 			SetSpeedCommand(car);
 		}

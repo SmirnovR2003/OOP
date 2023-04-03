@@ -17,7 +17,7 @@ const map<int, SpeedLimit> SPEEDS_IN_GEARS
 Car::Car()
 :gear(0)
 ,speed(0)
-,direction(0)
+,direction(Direction::inPlace)
 ,isTurnedOnEngine(false)
 {
 }
@@ -28,16 +28,13 @@ Car::~Car()
 
 bool Car::TurnOnEngine()
 {
-	if (!isTurnedOnEngine) 
-	{
-		isTurnedOnEngine = true;
-	}
+	isTurnedOnEngine = true;
 	return isTurnedOnEngine;
 }
 
 bool Car::TurnOffEngine()
 {
-	if (isTurnedOnEngine && speed == 0 && direction == 0 && gear == 0)
+	if (isTurnedOnEngine && speed == 0 && direction == Direction::inPlace && gear == 0)
 	{
 		isTurnedOnEngine = false;
 	}
@@ -98,7 +95,7 @@ bool Car::SetGearWithNewGearIsMinusOne(int newGear)
 
 bool Car::SetGearWithNewGearIsOne(int newGear)
 {
-	if (direction == 0 || direction == 1)
+	if (direction == Direction::inPlace || direction == Direction::forward)
 	{
 		gear = newGear;
 		return true;
@@ -134,7 +131,7 @@ bool Car::SetSpeedWithGearIsZero(int newSpeed)
 	if (newSpeed < speed)
 	{
 		speed = newSpeed;
-		if (speed == 0) direction = 0;
+		if (speed == 0) direction = Direction::inPlace;
 		return true;
 	}
 	else
@@ -150,9 +147,9 @@ bool Car::SetSpeedWithCommonGear(int newSpeed)
 	{
 		speed = newSpeed;
 
-		(speed == 0) ? direction = 0
-			: (gear == -1) ? direction = -1
-			: direction = 1;
+		(speed == 0) ? direction = Direction::inPlace
+			: (gear == -1) ? direction = Direction::back
+			: direction = Direction::forward;
 
 		return true;
 	}
@@ -166,7 +163,8 @@ bool Car::IsTurnedOn() const
 
 int Car::GetDirection() const
 {
-	return direction;
+	return direction == Direction::back ? -1
+		: direction == Direction::inPlace ? 0 : 1;
 }
 
 int Car::GetSpeed() const

@@ -83,7 +83,6 @@ SCENARIO("SetGear and SetSpeed functions tests")
 		REQUIRE(car.SetGear(5));
 
 		CHECK(car.SetGear(0));
-
 	}
 
 	SECTION("Check with on engine and not adequate speed or gear")

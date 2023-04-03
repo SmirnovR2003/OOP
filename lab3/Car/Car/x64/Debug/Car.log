@@ -1,4 +1,4 @@
 ﻿  Car.cpp
   main.cpp
   Создание кода...
-  Car.vcxproj -> C:\roman\C++\OOP\lab3\Car\x64\Debug\Car.exe
+C:\roman\C++\OOP\lab3\Car\Car\Car.cpp : fatal error C1090: Произошел сбой при вызове API PDB, код ошибки "3": C:\roman\C++\OOP\lab3\Car\Car\x64\Debug\vc143.pdb

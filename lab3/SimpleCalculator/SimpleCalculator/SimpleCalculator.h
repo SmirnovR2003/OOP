@@ -2,50 +2,86 @@
 #include <map>
 #include <string>
 #include <functional>
-typedef std::remove_cv<std::_Binder<std::remove_cv<std::_Unforced>::type, double(&)(double x, double y), std::reference_wrapper<double>, std::reference_wrapper<double>>>::type FuncValues;
+#include <vector>
+
+enum class Operations
+{
+	sum,
+	sub,
+	div,
+	mult,
+	nothing
+};
+
+enum class ObjectType
+{
+	var,
+	func,
+	nothing
+};
 
 class SimpleCalculator
 {
 public:
-	enum class Operations
-	{
-		sum,
-		difference,
-		division,
-		multiplication,
-		nothing
-	};
 
 	SimpleCalculator();
 
 	~SimpleCalculator();
 
-	bool CreateVariable(std::string name, double num = NAN);
+	bool CreateVariable(std::string name);
 
-	bool CreateFunction(std::string name, double num1 = NAN,  double num2 = NAN, Operations oper = Operations::nothing);
+	bool SetVariableValue(std::string name, double value);
 
-	std::map<std::string, int> GetAllVariables();
+	bool SetVariableValue(std::string name, std::string identifier);
 
-	std::map<std::string, int> GetAllFunctions();
+	bool CreateFunction(std::string name, std::string identifier);
 
-	std::pair<std::string, int> GetVariableValue(std::string name);
+	bool CreateFunction(std::string name, std::string identifier1, std::string identifier2, Operations operation);
 
-	std::pair<std::string, int> GetFunctionValue(std::string name);
+	std::map<std::string, double> GetAllVariables();
+
+	std::map<std::string, double> GetAllFunctions();
+
+	std::pair<std::string, double> GetVariable(std::string name);
+
+	std::pair<std::string, double> GetFunction(std::string name);
 
 private:
 
 	struct Func
 	{
+		double value = NAN;
+		std::pair<std::string, ObjectType> dep1, dep2; //имена функций или переменных от которых зависит данная функция
+		std::vector <std::string> dependensies; //имена функций зависящих от данниой функции
 		Operations oper = Operations::nothing;
-		FuncValues funcValue;
-		double dubValue;
-		std::vector <std::string> dependensies;
 	};
 
-	std::map<std::string, int> variables{};
+	struct Variable
+	{
+		double value = NAN;
+		std::vector <std::string> dependensies; //имена функций зависящих от данниой переменной
+	};
 
-	std::map<std::string, Func> functions{};
+	std::map<std::string, Variable> variables;
 
-	void SetRelevantFunctionsValues(std::string funcName);
+	std::map<std::string, Func> functions;
+
+	void SetRelevantFunctionsValues(std::string variableName);
+
+	Func CreateFunctionStruct(
+		std::pair<std::string, ObjectType> dep1,
+		std::pair<std::string, ObjectType> dep2,
+		Operations oper
+	);
+
+	double CalculateFunctionValue(double value1, double value2, Operations oper);
+
+	double CalculateFirstFunctionValue(std::pair<std::string, ObjectType> dep1);
+
+	double CalculateSecondFunctionValue(std::pair<std::string, ObjectType> dep2);
+
+	ObjectType DefineIdentifierType(std::string identifier);
+
+	void UpdateDependensies(std::string funcName, std::string identifier, ObjectType identifierType);
 };
 

@@ -8,6 +8,13 @@ struct SpeedLimit
 	int upperBound;
 };
 
+enum class Direction
+{
+	back,
+	inPlace,
+	forward
+};
+
 class Car
 {
 public:
@@ -40,7 +47,7 @@ private:
 
 	int speed;
 
-	int direction;
+	Direction direction;
 
 	bool isTurnedOnEngine;
 

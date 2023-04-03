@@ -1,34 +1,70 @@
-﻿// SimpleCalculator.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream>
-#include <functional>
-
+#include "SimpleCalculator.h"
+#include <windows.h>
+#include <string>
+#include <algorithm>
 using namespace std;
 
-double my_divide(double x, double y) { return x / y; }
-double& my_divide1(double x, double y) { double a = x / y; return a; }
+void ShowCommand()
+{
+	cout << "Commands for using car\n";
+	cout << "	'stop' for end calculating\n";
+	cout << "	'help' for show commands\n";
+	cout << "	'var <identifier>' for create variable\n";
+	cout << "	'let <identifier1> = <floating point number>' or 'let <identifier1> = <identifier2>' for set variable's value\n";
+	cout << "	'fn <identifier1> = <identifier2>' or 'fn <identifier1> = <identifier2><operation><identifier3> for create function'\n";
+	cout << "	'print <identifier>' for see identifier's value\n";
+	cout << "	'printvars' for see all variables values\n";
+	cout << "	'printfns' for see all functions values\n";
+}
+
 
 int main()
 {
-	double x = 10, y = 2, a;
+	SimpleCalculator calc;
+	string answer;
+	ShowCommand();
 
-	auto fn_invert = bind(my_divide, ref(x), ref(y));
+	cout << ">";
+	getline(cin, answer);
 
-	cout << fn_invert() << endl;
-	x = 40;
-	cout << fn_invert() << endl;
+	while (answer.substr(0, 4) != "stop")
+	{
+		if (answer.substr(0, 4) == "help")
+		{
+			ShowCommand();
+		}
+		else if (answer.substr(0, 3) == "var")
+		{
 
-	auto fn_invert1 = bind(my_divide, ref(x), ref(y));
-	cout << fn_invert1() << endl;
+		}
+		else if (answer.substr(0, 3) == "let")
+		{
 
-	auto d = fn_invert1();
-	auto c = d;
+		}
+		else if (answer.substr(0, 2) == "fn")
+		{
 
-	auto fn_invert2 = bind(my_divide, ref(d), ref(y));
-	cout << fn_invert2() << endl;
+		}
+		else if (answer.substr(0, 6) == "print " || answer.substr(0, 6) == "print<")
+		{
 
-	x = 400;
-	cout << fn_invert() << endl;
-	cout << fn_invert1() << endl;
+		}
+		else if (answer.substr(0, 6) == "print " || answer.substr(0, 6) == "printvars<")
+		{
+
+		}
+		else if (answer.substr(0, 6) == "print " || answer.substr(0, 6) == "printfns<")
+		{
+
+		}
+		else
+		{
+			cout << "Invalid command\nUse command 'help' for show commands\n";
+		}
+		
+		cout << ">";
+		getline(cin, answer);
+	}
 }
