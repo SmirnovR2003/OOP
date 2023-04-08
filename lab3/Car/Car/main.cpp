@@ -25,15 +25,21 @@ void ShowCommand()
 	cout << "		gear = 5 -> 50 <= speed <= 150\n";
 }
 
-void InfoCommand(const Car car)
+void InfoCommand(const Car& car)
 {
 	cout << "Engine condition: " << (car.IsTurnedOn() ? "On" : "Off") << endl;
 	cout << "Gear is " << car.GetGear() << endl;
 	cout << "Speed is " << car.GetSpeed() << endl;
-	cout << "Direction is " << car.GetDirection() << endl;
+	cout << "Direction is ";
+	string direction = (car.GetDirection() == Direction::back)
+		? "backward\n"
+		: (car.GetDirection() == Direction::inPlace)
+		? "in place\n"
+		: "frontward\n";
+	cout << direction;
 }
 
-void EngineOnCommand(Car car)
+void EngineOnCommand(Car& car)
 {
 	if (car.TurnOnEngine())
 	{
@@ -45,7 +51,7 @@ void EngineOnCommand(Car car)
 	}
 }
 
-void EngineOffCommand(Car car)
+void EngineOffCommand(Car& car)
 {
 	if (car.TurnOffEngine())
 	{
@@ -57,7 +63,7 @@ void EngineOffCommand(Car car)
 	}
 }
 
-void SetGearCommand(Car car)
+void SetGearCommand(Car& car)
 {
 	try
 	{
@@ -89,7 +95,7 @@ void SetGearCommand(Car car)
 	}
 }
 
-void SetSpeedCommand(Car car)
+void SetSpeedCommand(Car& car)
 {
 	try
 	{
@@ -103,7 +109,7 @@ void SetSpeedCommand(Car car)
 			{
 				cout << "Turn on the engine\n";
 			}
-			else if (pair<int, int> speedLimit = car.GetSpeedsInGear(); intAnswer < speedLimit.first || intAnswer > speedLimit.first)
+			else if (pair<int, int> speedLimit = car.GetSpeedsBarierswithCurrentGear(); intAnswer < speedLimit.first || intAnswer > speedLimit.first)
 			{
 				cout << "Invalid speed\n";
 				cout << "Enter a speed appropriated current gear or switch to the appropriate gear\n";
@@ -121,18 +127,15 @@ void SetSpeedCommand(Car car)
 	}
 }
 
-int main()
+void DialogeWithUser(Car& car)
 {
-	Car car;
 	string answer;
 	ShowCommand();
-
 	cout << ">";
-	cin >> answer;
-	transform(answer.begin(), answer.end(), answer.begin(), [](char ch) { return tolower(ch);});
-
-	while (answer != "stop")
+	while (cin >> answer)
 	{
+		transform(answer.begin(), answer.end(), answer.begin(), [](unsigned char ch) { return tolower(ch);});
+
 		if (answer == "help")
 		{
 			ShowCommand();
@@ -157,12 +160,21 @@ int main()
 		{
 			SetSpeedCommand(car);
 		}
+		else if (answer == "stop")
+		{
+			break;
+		}
 		else
 		{
 			cout << "Invalid command\nUse command 'Help' for show commands\n";
 		}
 		cout << ">";
-		cin >> answer;
-		transform(answer.begin(), answer.end(), answer.begin(), [](char ch) { return tolower(ch);});
-	} 
+	}
+}
+
+int main()
+{
+	Car car;
+
+	DialogeWithUser(car);
 }

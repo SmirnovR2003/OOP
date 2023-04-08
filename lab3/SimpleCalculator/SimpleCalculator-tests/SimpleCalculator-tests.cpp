@@ -109,7 +109,7 @@ SCENARIO("CreateFunction(string name, string identifier1, string identifier2, Op
 		REQUIRE(calc.CreateFunction("func1", "num1", "num2", Operations::sum));
 		REQUIRE(calc.CreateFunction("func2", "func1", "func1", Operations::mult));
 		REQUIRE(calc.CreateFunction("func3", "func2", "func1", Operations::div));
-		REQUIRE(calc.GetFunction("func3").second == 10.234 * 2);
+		REQUIRE(calc.GetIdentifier("func3").second == 10.234 * 2);
 	}
 
 
@@ -122,21 +122,21 @@ SCENARIO("CreateFunction(string name, string identifier1, string identifier2, Op
 		REQUIRE(calc.CreateFunction("func1", "num1", "num2", Operations::sum));
 		REQUIRE(calc.CreateFunction("func2", "func1", "func1", Operations::mult));
 		REQUIRE(calc.CreateFunction("func3", "func2", "func1", Operations::div));
-		REQUIRE(calc.GetFunction("func3").second == 10.234 * 2);
+		REQUIRE(calc.GetIdentifier("func3").second == 10.234 * 2);
 
 		REQUIRE(calc.SetVariableValue("num1", 5));
-		REQUIRE(calc.GetVariable("num2").second == 10.234);
-		REQUIRE(calc.GetFunction("func3").second == 15.234);
+		REQUIRE(calc.GetIdentifier("num2").second == 10.234);
+		REQUIRE(calc.GetIdentifier("func3").second == 15.234);
 	}
 }
 
-SCENARIO("GetVariable function tests")
+SCENARIO("GetIdentifier function tests")
 {
 	SECTION("Check with not declared variable")
 	{
 		SimpleCalculator calc;
 
-		CHECK_THROWS(calc.GetVariable("num1"));
+		CHECK_THROWS(calc.GetIdentifier("num1"));
 	}
 
 	SECTION("Check with variable is nan")
@@ -144,7 +144,7 @@ SCENARIO("GetVariable function tests")
 		SimpleCalculator calc;
 
 		REQUIRE(calc.CreateVariable("num1"));
-		REQUIRE(isnan(calc.GetVariable("num1").second));
+		REQUIRE(isnan(calc.GetIdentifier("num1").second));
 	}
 
 	SECTION("Check with variable is not nan")
@@ -152,9 +152,8 @@ SCENARIO("GetVariable function tests")
 		SimpleCalculator calc;
 
 		REQUIRE(calc.SetVariableValue("num1", 10.123));
-		REQUIRE(calc.GetVariable("num1").second == 10.123);
+		REQUIRE(calc.GetIdentifier("num1").second == 10.123);
 	}
-
 
 	SECTION("Check with any variable are not nan")
 	{
@@ -163,7 +162,27 @@ SCENARIO("GetVariable function tests")
 		REQUIRE(calc.SetVariableValue("num1", 10.123));
 		REQUIRE(calc.SetVariableValue("num2", 11.123));
 		REQUIRE(calc.SetVariableValue("num3", 12.123));
-		REQUIRE(calc.GetVariable("num2").second == 11.123);
+		REQUIRE(calc.GetIdentifier("num2").second == 11.123);
+	}
+
+	SECTION("Check get function with one variable")
+	{
+		SimpleCalculator calc;
+
+		REQUIRE(calc.SetVariableValue("num1", 10.123));
+		REQUIRE(calc.GetIdentifier("num1").second == 10.123);
+		REQUIRE(calc.CreateFunction("fn1", "num1"));
+		REQUIRE(calc.GetIdentifier("fn1").second == 10.123);
+	}
+
+	SECTION("Check get function with sum two variables")
+	{
+		SimpleCalculator calc;
+
+		REQUIRE(calc.SetVariableValue("num1", 10.123));
+		REQUIRE(calc.SetVariableValue("num2", 10.123));
+		REQUIRE(calc.CreateFunction("fn1", "num1", "num2", Operations::sum));
+		REQUIRE(calc.GetIdentifier("fn1").second == 10.123 * 2);
 	}
 }
 
@@ -202,28 +221,6 @@ SCENARIO("GetAllVariables function tests")
 		REQUIRE(calc.GetAllVariables().find("num1")->second == 10.123);
 		REQUIRE(calc.GetAllVariables().find("num2")->second == 11.123);
 		REQUIRE(calc.GetAllVariables().find("num3")->second == 12.123);
-	}
-}
-
-SCENARIO("GetFunction function tests")
-{
-	SECTION("Check with one variable")
-	{
-		SimpleCalculator calc;
-
-		REQUIRE(calc.SetVariableValue("num1", 10.123));
-		REQUIRE(calc.CreateFunction("fn1", "num1"));
-		REQUIRE(calc.GetFunction("fn1").second == 10.123);
-	}
-
-	SECTION("Check with sum two variables")
-	{
-		SimpleCalculator calc;
-
-		REQUIRE(calc.SetVariableValue("num1", 10.123));
-		REQUIRE(calc.SetVariableValue("num2", 10.123));
-		REQUIRE(calc.CreateFunction("fn1", "num1", "num2", Operations::sum));
-		REQUIRE(calc.GetFunction("fn1").second == 10.123 * 2);
 	}
 }
 

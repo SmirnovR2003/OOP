@@ -7,7 +7,7 @@ struct SpeedLimit
 	int lowerBound;
 	int upperBound;
 };
-
+//префикс m_
 enum class Direction
 {
 	back,
@@ -20,7 +20,7 @@ class Car
 public:
 	Car();
 
-	~Car();
+	~Car(); //убрать деструктор
 
 	bool TurnOnEngine();
 
@@ -32,28 +32,28 @@ public:
 
 	bool IsTurnedOn()const;
 
-	int GetDirection()const;
+	Direction GetDirection()const;//возвращать enum
 
 	int GetSpeed()const;
 
 	int GetGear()const;
 
-	std::pair<int, int> GetSpeedsInGear()const;
+	std::pair<int, int> GetSpeedsBariersWithCurrentGear()const;//переименновать
 
 
 private:
 
-	int gear;
+	int m_gear;
 
-	int speed;
+	int m_speed;
 
-	Direction direction;
+	Direction m_direction;
 
-	bool isTurnedOnEngine;
+	bool m_isTurnedOnEngine;
 
 	bool SetSpeedWithGearIsZero(int newSpeed);
 
-	bool SetSpeedWithCommonGear(int newSpeed);
+	bool SetSpeedWithGearFromOneToFiveOrIsMinusOne(int newSpeed);
 
 	bool SetGearWithNewGearIsOne(int newGear);
 

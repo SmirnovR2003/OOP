@@ -26,32 +26,29 @@ public:
 
 	SimpleCalculator();
 
-	~SimpleCalculator();
+	bool CreateVariable(const std::string& name);
 
-	bool CreateVariable(std::string name);
+	bool SetVariableValue(const std::string& name, double value);
 
-	bool SetVariableValue(std::string name, double value);
+	bool SetVariableValue(const std::string& name, const std::string& identifier);
 
-	bool SetVariableValue(std::string name, std::string identifier);
+	bool CreateFunction(const std::string& name, const std::string& identifier);
 
-	bool CreateFunction(std::string name, std::string identifier);
-
-	bool CreateFunction(std::string name, std::string identifier1, std::string identifier2, Operations operation);
+	bool CreateFunction(const std::string& name, const std::string& identifier1, const std::string& identifier2, Operations operation);
 
 	std::map<std::string, double> GetAllVariables();
 
 	std::map<std::string, double> GetAllFunctions();
 
-	std::pair<std::string, double> GetVariable(std::string name);
-
-	std::pair<std::string, double> GetFunction(std::string name);
+	std::pair<std::string, double> GetIdentifier(const std::string& name);
 
 private:
 
 	struct Func
 	{
 		double value = NAN;
-		std::pair<std::string, ObjectType> dep1, dep2; //имена функций или переменных от которых зависит данная функция
+		double* dep1 = nullptr; //ссылка на значение первого идентификатора от которго зависит функция
+		double* dep2 = nullptr; //ссылка на значение второго идентификатора от которго зависит функция. если oper == nothing, то nullptr
 		std::vector <std::string> dependensies; //имена функций зависящих от данниой функции
 		Operations oper = Operations::nothing;
 	};
@@ -62,26 +59,26 @@ private:
 		std::vector <std::string> dependensies; //имена функций зависящих от данниой переменной
 	};
 
-	std::map<std::string, Variable> variables;
+	std::map<std::string, Variable> m_variables;
 
-	std::map<std::string, Func> functions;
+	std::map<std::string, Func> m_functions;
 
-	void SetRelevantFunctionsValues(std::string variableName);
+	void SetRelevantFunctionsValues(const std::string& variableName);
+
+	void SetRelevantFunctionValue(const Func& func, const std::string& funcName);
 
 	Func CreateFunctionStruct(
-		std::pair<std::string, ObjectType> dep1,
-		std::pair<std::string, ObjectType> dep2,
+		const std::pair<std::string, ObjectType>& dep1,
+		const std::pair<std::string, ObjectType>& dep2,
 		Operations oper
 	);
 
 	double CalculateFunctionValue(double value1, double value2, Operations oper);
 
-	double CalculateFirstFunctionValue(std::pair<std::string, ObjectType> dep1);
+	ObjectType DefineIdentifierType(const std::string& identifier);
 
-	double CalculateSecondFunctionValue(std::pair<std::string, ObjectType> dep2);
+	void UpdateDependensies(const std::string& funcName, const std::string& identifier, ObjectType identifierType);
 
-	ObjectType DefineIdentifierType(std::string identifier);
-
-	void UpdateDependensies(std::string funcName, std::string identifier, ObjectType identifierType);
+	double* GetIdentifierPointer(const std::string& name);
 };
 

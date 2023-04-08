@@ -8,6 +8,32 @@
 
 using namespace std;
 
+bool SetAndCheckGear(Car& car, int newGear)
+{
+	if (!car.SetGear(newGear))
+	{
+		return false;
+	}
+	if (car.GetGear() != newGear)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool SetAndCheckSpeed(Car& car, int newSpeed)
+{
+	if (!car.SetSpeed(newSpeed))
+	{
+		return false;
+	}
+	if (car.GetSpeed() != newSpeed)
+	{
+		return false;
+	}
+	return true;
+}
+
 SCENARIO("TurnOnEngine function tests")
 {
 	SECTION("Check with on engine")
@@ -38,13 +64,14 @@ SCENARIO("TurnOffEngine function tests")
 		Car car;
 		REQUIRE(car.TurnOnEngine());
 
-		REQUIRE(car.SetGear(1));
+		REQUIRE(SetAndCheckGear(car, 1));
 
 		REQUIRE(!car.TurnOffEngine());
 
-		REQUIRE(car.SetSpeed(25));
+		REQUIRE(SetAndCheckSpeed(car, 25));
 
 		CHECK(!car.TurnOffEngine());
+
 	}
 
 
@@ -55,34 +82,39 @@ SCENARIO("TurnOffEngine function tests")
 	}
 }
 
+//недьзя переключить на 2 передачу с задней 20
+//исправить ^Z
+
 SCENARIO("SetGear and SetSpeed functions tests")
 {
 	SECTION("Check with off engine")
 	{
 		Car car;
-		CHECK(!car.SetSpeed(1));
-		CHECK(!car.SetGear(1));
+		REQUIRE(!SetAndCheckSpeed(car, 1));
+		REQUIRE(!SetAndCheckGear(car, 1));
 	}
 
 	SECTION("Check with on engine and adequate speed or gear")
 	{
 		Car car;
 		car.TurnOnEngine();
-		CHECK(car.SetGear(0));
-		CHECK(car.SetGear(-1));
+		REQUIRE(SetAndCheckGear(car, 0));
+		REQUIRE(SetAndCheckGear(car, -1));
 
-		REQUIRE(car.SetGear(1));
-		REQUIRE(car.SetSpeed(25));
+		REQUIRE(SetAndCheckGear(car, 1));
+		REQUIRE(SetAndCheckSpeed(car, 25));
 
-		REQUIRE(car.SetGear(2));
-		REQUIRE(car.SetSpeed(45));
+		REQUIRE(SetAndCheckGear(car, 2));
+		REQUIRE(SetAndCheckSpeed(car, 45));
 
-		REQUIRE(car.SetGear(4));
-		REQUIRE(car.SetSpeed(60));
+		REQUIRE(SetAndCheckGear(car, 4));
+		REQUIRE(SetAndCheckSpeed(car, 60));
 
-		REQUIRE(car.SetGear(5));
+		REQUIRE(SetAndCheckGear(car, 5));
+		REQUIRE(SetAndCheckSpeed(car, 100));
 
-		CHECK(car.SetGear(0));
+		REQUIRE(SetAndCheckGear(car, 0));
+		REQUIRE(SetAndCheckSpeed(car, 60));
 	}
 
 	SECTION("Check with on engine and not adequate speed or gear")
@@ -91,48 +123,49 @@ SCENARIO("SetGear and SetSpeed functions tests")
 		car.TurnOnEngine();
 		CHECK(!car.SetGear(2));
 
-		CHECK(car.SetGear(1));
-		REQUIRE(car.SetSpeed(2));
+		REQUIRE(SetAndCheckGear(car, 1));
+		REQUIRE(SetAndCheckSpeed(car, 2));
+
 		CHECK(!car.SetGear(-1));
 
-		REQUIRE(car.SetSpeed(0));
-		REQUIRE(car.SetGear(-1));
+		REQUIRE(SetAndCheckSpeed(car, 0));
+		REQUIRE(SetAndCheckGear(car, -1));
 
-		REQUIRE(car.SetSpeed(20));
+		REQUIRE(SetAndCheckSpeed(car, 20));
 		REQUIRE(!car.SetSpeed(21));
 		CHECK(!car.SetGear(1));
+		CHECK(!car.SetGear(2));
 
-		REQUIRE(car.SetGear(0));
+		REQUIRE(SetAndCheckGear(car, 0));
 		REQUIRE(!car.SetGear(-1));
 
-		REQUIRE(car.SetSpeed(0));
+		REQUIRE(SetAndCheckSpeed(car, 0));
 
-		REQUIRE(car.GetDirection() == 0);
+		REQUIRE(car.GetDirection() == Direction::inPlace);
 
-		REQUIRE(car.SetGear(1));
-		REQUIRE(car.SetSpeed(30));
-		REQUIRE(!car.SetSpeed(31));
+		REQUIRE(SetAndCheckGear(car, 1));
+		REQUIRE(SetAndCheckSpeed(car, 30));
+		REQUIRE(!SetAndCheckSpeed(car, 31));
 
-		REQUIRE(car.SetGear(2));
-		REQUIRE(car.SetSpeed(50));
+		REQUIRE(SetAndCheckGear(car, 2));
+		REQUIRE(SetAndCheckSpeed(car, 50));
 		REQUIRE(!car.SetSpeed(51));
 		REQUIRE(!car.SetSpeed(19));
 
-		REQUIRE(car.SetGear(3));
-		REQUIRE(car.SetSpeed(60));
+		REQUIRE(SetAndCheckGear(car, 3));
+		REQUIRE(SetAndCheckSpeed(car, 60));
 		REQUIRE(!car.SetSpeed(61));
 		REQUIRE(!car.SetSpeed(29));
 
-		REQUIRE(car.SetGear(4));
-		REQUIRE(car.SetSpeed(90));
+		REQUIRE(SetAndCheckGear(car, 4));
+		REQUIRE(SetAndCheckSpeed(car, 90));
 		REQUIRE(!car.SetSpeed(91));
 		REQUIRE(!car.SetSpeed(39));
 
-		REQUIRE(car.SetGear(5));
-		REQUIRE(car.SetSpeed(150));
+		REQUIRE(SetAndCheckGear(car, 5));
+		REQUIRE(SetAndCheckSpeed(car, 150));
 		REQUIRE(!car.SetSpeed(151));
 		REQUIRE(!car.SetSpeed(49));
-
 	}
 }
 
@@ -157,25 +190,25 @@ SCENARIO("GetDirection function tests")
 	SECTION("Check with default direction")
 	{
 		Car car;
-		CHECK(car.GetDirection() == 0);
+		CHECK(car.GetDirection() == Direction::inPlace);
 	}
 
 	SECTION("Check with reverse gear and not zero speed")
 	{
 		Car car;
 		REQUIRE(car.TurnOnEngine());
-		REQUIRE(car.SetGear(-1));
-		REQUIRE(car.SetSpeed(5));
-		CHECK(car.GetDirection() == -1);
+		REQUIRE(SetAndCheckGear(car, -1));
+		REQUIRE(SetAndCheckSpeed(car, 5));
+		CHECK(car.GetDirection() == Direction::back);
 	}
 
 	SECTION("Check with forward gear and not zero speed")
 	{
 		Car car;
 		REQUIRE(car.TurnOnEngine());
-		REQUIRE(car.SetGear(1));
-		REQUIRE(car.SetSpeed(5));
-		CHECK(car.GetDirection() == 1);
+		REQUIRE(SetAndCheckGear(car, 1));
+		REQUIRE(SetAndCheckSpeed(car, 5));
+		CHECK(car.GetDirection() == Direction::forward);
 	}
 }
 
@@ -191,9 +224,8 @@ SCENARIO("GetSpeed function tests")
 	{
 		Car car;
 		REQUIRE(car.TurnOnEngine());
-		REQUIRE(car.SetGear(1));
-		REQUIRE(car.SetSpeed(5));
-		CHECK(car.GetSpeed() == 5);
+		REQUIRE(SetAndCheckGear(car, -1));
+		REQUIRE(SetAndCheckSpeed(car, 5));
 	}
 }
 
@@ -209,7 +241,7 @@ SCENARIO("GetGear function tests")
 	{
 		Car car;
 		REQUIRE(car.TurnOnEngine());
-		REQUIRE(car.SetGear(1));
-		CHECK(car.GetGear() == 1);
+		REQUIRE(SetAndCheckGear(car, -1));
+		REQUIRE(SetAndCheckGear(car, 1));
 	}
 }

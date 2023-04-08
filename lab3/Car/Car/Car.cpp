@@ -3,6 +3,8 @@
 
 using namespace std;
 
+const int MAX_GEAR = 5;
+const int MIN_GEAR = -1;
 
 const map<int, SpeedLimit> SPEEDS_IN_GEARS
 {
@@ -15,10 +17,10 @@ const map<int, SpeedLimit> SPEEDS_IN_GEARS
 };
 
 Car::Car()
-:gear(0)
-,speed(0)
-,direction(Direction::inPlace)
-,isTurnedOnEngine(false)
+: m_gear(0)
+, m_speed(0)
+, m_direction(Direction::inPlace)
+, m_isTurnedOnEngine(false)
 {
 }
 
@@ -28,34 +30,35 @@ Car::~Car()
 
 bool Car::TurnOnEngine()
 {
-	isTurnedOnEngine = true;
-	return isTurnedOnEngine;
+	m_isTurnedOnEngine = true;
+	return m_isTurnedOnEngine;
 }
 
 bool Car::TurnOffEngine()
 {
-	if (isTurnedOnEngine && speed == 0 && direction == Direction::inPlace && gear == 0)
+	if (m_isTurnedOnEngine && m_speed == 0 && m_direction == Direction::inPlace && m_gear == 0)
 	{
-		isTurnedOnEngine = false;
+		m_isTurnedOnEngine = false;
 	}
-	return !isTurnedOnEngine;
+	return !m_isTurnedOnEngine;
 }
 
 bool Car::SetGear(int newGear)
 {
-	if (!isTurnedOnEngine)
+	if (!m_isTurnedOnEngine)
 	{
 		return false;
 	}
 
-	if (newGear < -1 || newGear > 5)
+	//не использовать магических констант
+	if (newGear < MIN_GEAR || newGear > MAX_GEAR)
 	{
 		return false;
 	}
 
 	if (newGear == 0)
 	{
-		gear = newGear;
+		m_gear = newGear;
 		return true;
 	}
 
@@ -70,9 +73,9 @@ bool Car::SetGear(int newGear)
 	}
 
 	if (SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(newGear)->second;
-		speed >= speedLimit.lowerBound && speed <= speedLimit.upperBound)
+		m_speed >= speedLimit.lowerBound && m_speed <= speedLimit.upperBound && m_direction == Direction::forward)
 	{
-		gear = newGear;
+		m_gear = newGear;
 		return true;
 	}
 
@@ -82,9 +85,9 @@ bool Car::SetGear(int newGear)
 
 bool Car::SetGearWithNewGearIsMinusOne(int newGear)
 {
-	if (gear == -1 || speed == 0)
+	if (m_gear == -1 || m_speed == 0)
 	{
-		gear = newGear;
+		m_gear = newGear;
 		return true;
 	}
 	else
@@ -95,9 +98,11 @@ bool Car::SetGearWithNewGearIsMinusOne(int newGear)
 
 bool Car::SetGearWithNewGearIsOne(int newGear)
 {
-	if (direction == Direction::inPlace || direction == Direction::forward)
+	if (SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(newGear)->second;
+		m_speed >= speedLimit.lowerBound && m_speed <= speedLimit.upperBound 
+		&& (m_direction == Direction::inPlace || m_direction == Direction::forward))
 	{
-		gear = newGear;
+		m_gear = newGear;
 		return true;
 	}
 	else
@@ -108,7 +113,7 @@ bool Car::SetGearWithNewGearIsOne(int newGear)
 
 bool Car::SetSpeed(int newSpeed)
 {
-	if (!isTurnedOnEngine)
+	if (!m_isTurnedOnEngine)
 	{
 		return false;
 	}
@@ -118,20 +123,20 @@ bool Car::SetSpeed(int newSpeed)
 		return false;
 	}
 
-	if (gear == 0)
+	if (m_gear == 0)
 	{
 		return SetSpeedWithGearIsZero(newSpeed);
 	}
 
-	return SetSpeedWithCommonGear(newSpeed);
+	return SetSpeedWithGearFromOneToFiveOrIsMinusOne(newSpeed);
 }
 
 bool Car::SetSpeedWithGearIsZero(int newSpeed)
 {
-	if (newSpeed < speed)
+	if (newSpeed < m_speed)
 	{
-		speed = newSpeed;
-		if (speed == 0) direction = Direction::inPlace;
+		m_speed = newSpeed;
+		if (m_speed == 0) m_direction = Direction::inPlace;
 		return true;
 	}
 	else
@@ -140,16 +145,17 @@ bool Car::SetSpeedWithGearIsZero(int newSpeed)
 	}
 }
 
-bool Car::SetSpeedWithCommonGear(int newSpeed)
+//при чтении не понятно что такое CommonGear 
+bool Car::SetSpeedWithGearFromOneToFiveOrIsMinusOne(int newSpeed)
 {
-	if (SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(gear)->second;
+	if (SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(m_gear)->second;
 		newSpeed >= speedLimit.lowerBound && newSpeed <= speedLimit.upperBound)
 	{
-		speed = newSpeed;
+		m_speed = newSpeed;
 
-		(speed == 0) ? direction = Direction::inPlace
-			: (gear == -1) ? direction = Direction::back
-			: direction = Direction::forward;
+		(m_speed == 0) ? m_direction = Direction::inPlace
+			: (m_gear == -1) ? m_direction = Direction::back
+			: m_direction = Direction::forward;
 
 		return true;
 	}
@@ -158,32 +164,31 @@ bool Car::SetSpeedWithCommonGear(int newSpeed)
 
 bool Car::IsTurnedOn() const
 {
-	return isTurnedOnEngine;
+	return m_isTurnedOnEngine;
 }
 
-int Car::GetDirection() const
+Direction Car::GetDirection() const
 {
-	return direction == Direction::back ? -1
-		: direction == Direction::inPlace ? 0 : 1;
+	return m_direction ;
 }
 
 int Car::GetSpeed() const
 {
-	return speed;
+	return m_speed;
 }
 
 int Car::GetGear() const
 {
-	return gear;
+	return m_gear;
 }
 
-pair<int, int> Car::GetSpeedsInGear()const
+pair<int, int> Car::GetSpeedsBariersWithCurrentGear()const//тесты
 {
-	if (gear == 0)
+	if (m_gear == 0)
 	{
-		return { };
+		return {0, 0};
 	}
-	SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(gear)->second; 
+	SpeedLimit speedLimit = SPEEDS_IN_GEARS.find(m_gear)->second;
 
 	return { speedLimit.lowerBound, speedLimit.upperBound };
 }

@@ -1,2 +1,4 @@
 ﻿  SimpleCalculator.cpp
+C:\roman\C++\OOP\lab3\SimpleCalculator\SimpleCalculator\SimpleCalculator.cpp(215,9): warning C4101: num1: неиспользованная локальная переменная
+C:\roman\C++\OOP\lab3\SimpleCalculator\SimpleCalculator\SimpleCalculator.cpp(215,15): warning C4101: num2: неиспользованная локальная переменная
   SimpleCalculator.vcxproj -> C:\roman\C++\OOP\lab3\SimpleCalculator\x64\Debug\SimpleCalculator.exe

@@ -1,0 +1,10 @@
+﻿  SimpleCalculator.cpp
+  SimpleCalculator-tests.cpp
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+  All 6607 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  SimpleCalculator-tests.vcxproj -> C:\roman\C++\OOP\lab3\SimpleCalculator\Release\SimpleCalculator-tests.exe
+  ===============================================================================
+  All tests passed (79 assertions in 7 test cases)
+  
