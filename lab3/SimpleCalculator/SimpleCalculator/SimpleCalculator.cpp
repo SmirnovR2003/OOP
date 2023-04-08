@@ -84,6 +84,7 @@ bool SimpleCalculator::CreateFunction(const string& name, const string& identifi
 		ObjectType identifierType = DefineIdentifierType(identifier);
 		m_functions[name] = CreateFunctionStruct
 		(
+			name,
 			{ identifier , identifierType },
 			{ "" , ObjectType::nothing },
 			Operations::nothing
@@ -125,6 +126,7 @@ bool SimpleCalculator::CreateFunction(const string& name, const string& identifi
 		ObjectType identifierType2 = DefineIdentifierType(identifier2);
 		m_functions[name] = CreateFunctionStruct
 		(
+			name,
 			{ identifier1 , identifierType1 },
 			{ identifier2 , identifierType2 },
 			operation
@@ -185,46 +187,57 @@ pair<string, double> SimpleCalculator::GetIdentifier(const string& name)
 
 void SimpleCalculator::SetRelevantFunctionsValues(const string& variableName)
 {
-	queue<string> q{};
+	map<string, bool> updatedFunctions{};
+	queue<Func*> q{};
 	for (const auto& funcName : m_variables[variableName].dependensies)
 	{
-		q.push(funcName);
+		if (updatedFunctions.count(funcName) == 0)
+		{
+			q.push(&m_functions.find(funcName)->second);
+			updatedFunctions[funcName] = true;
+		}
 	}
 
 	while (!q.empty())
 	{
-		string funcName = q.front();
+		Func* func = q.front();
 		q.pop();
 
-		if (m_functions.count(funcName) == 1)
+		for (const auto& dependenseName : func->dependensies)
 		{
-			Func func = m_functions.find(funcName)->second;
-
-			for (const auto& dependenseName : func.dependensies)
+			if (updatedFunctions.count(dependenseName) == 0)
 			{
-				q.push(dependenseName);
+				q.push(&m_functions.find(dependenseName)->second);
+				updatedFunctions[dependenseName] = true;
 			}
-
-			SetRelevantFunctionValue(func, funcName);
 		}
+
+		SetRelevantFunctionValue(func);
+		
 	}
 }
 
-void SimpleCalculator::SetRelevantFunctionValue(const Func& func, const string& funcName)
+void SimpleCalculator::SetRelevantFunctionValue(const Func* func)
 {
 
-	if (func.oper == Operations::nothing)
+	if (func->oper == Operations::nothing)
 	{
-		m_functions[funcName].value = *func.dep1;
+		m_functions[func->name].value = *func->dep1;
 	}
 	else
 	{
-		m_functions[funcName].value = CalculateFunctionValue(*func.dep1, *func.dep2, func.oper);
+		m_functions[func->name].value = CalculateFunctionValue(*func->dep1, *func->dep2, func->oper);
 	}
 
 }
 
-SimpleCalculator::Func SimpleCalculator::CreateFunctionStruct(const pair<string, ObjectType>& dep1, const pair<string, ObjectType>& dep2, Operations oper)
+SimpleCalculator::Func SimpleCalculator::CreateFunctionStruct
+(
+	const string& name,
+	const pair<string, ObjectType>& dep1, 
+	const pair<string, ObjectType>& dep2, 
+	Operations oper
+)
 {
 	try
 	{
@@ -232,6 +245,7 @@ SimpleCalculator::Func SimpleCalculator::CreateFunctionStruct(const pair<string,
 		double* value2 = (dep2.second != ObjectType::nothing) ? GetIdentifierPointer(dep2.first) : nullptr;
 		return
 		{ 
+			name,
 			dep2.second != ObjectType::nothing ?
 				CalculateFunctionValue(*value1, *value2,  oper) : 
 				*value1 ,

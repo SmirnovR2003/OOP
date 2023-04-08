@@ -46,6 +46,7 @@ private:
 
 	struct Func
 	{
+		std::string name;
 		double value = NAN;
 		double* dep1 = nullptr; //ссылка на значение первого идентификатора от которго зависит функция
 		double* dep2 = nullptr; //ссылка на значение второго идентификатора от которго зависит функция. если oper == nothing, то nullptr
@@ -65,9 +66,11 @@ private:
 
 	void SetRelevantFunctionsValues(const std::string& variableName);
 
-	void SetRelevantFunctionValue(const Func& func, const std::string& funcName);
+	void SetRelevantFunctionValue(const Func* func);
 
-	Func CreateFunctionStruct(
+	Func CreateFunctionStruct
+	(
+		const std::string& name,
 		const std::pair<std::string, ObjectType>& dep1,
 		const std::pair<std::string, ObjectType>& dep2,
 		Operations oper
