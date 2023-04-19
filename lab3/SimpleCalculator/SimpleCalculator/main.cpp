@@ -62,12 +62,12 @@ void LetCommand(SimpleCalculator& calc, const string& answer)
 
 	if (!regex_search(answer, matches, r))
 	{
-		cout << "Enter the notation according to the 'let' command structure\nFor more information use command 'help'";
+		cout << "Enter the notation according to the 'let' command structure\nFor more information use command 'help'\n";
 		return;
 	}
 	if (matches.prefix().matched || matches.suffix().matched)
 	{
-		cout << "Enter the notation according to the 'let' command structure\nFor more information use command 'help'";
+		cout << "Enter the notation according to the 'let' command structure\nFor more information use command 'help'\n";
 		return;
 	}
 
@@ -101,12 +101,12 @@ void FnCommand(SimpleCalculator& calc, const string& answer)
 
 	if (!regex_search(answer, matches, r))
 	{
-		cout << "Enter the notation according to the 'fn' command structure\nFor more information use command 'help'";
+		cout << "Enter the notation according to the 'fn' command structure\nFor more information use command 'help'\n";
 		return;
 	}
 	if (matches.prefix().matched || matches.suffix().matched)
 	{
-		cout << "Enter the notation according to the 'fn' command structure\nFor more information use command 'help'";
+		cout << "Enter the notation according to the 'fn' command structure\nFor more information use command 'help'\n";
 		return;
 	}
 
@@ -191,14 +191,18 @@ void PrintFnsCommand(SimpleCalculator& calc, const string& answer)
 
 int main()
 {
+	
 	SimpleCalculator calc;
 	string answer;
 	ShowCommand();
 
+	//диалог с пользователем вынести
 	cout << ">";
 	cout << fixed << setprecision(2);
 	while (getline(cin, answer))
 	{
+		//убрать substr сделать через >>
+		//сделать команды через map
 		if (answer.substr(0, 4) == "help")
 		{
 			ShowCommand();

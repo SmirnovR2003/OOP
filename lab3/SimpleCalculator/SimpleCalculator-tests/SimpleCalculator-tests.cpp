@@ -253,3 +253,5 @@ SCENARIO("GetAllFunction function tests")
 		REQUIRE(calc.GetAllFunctions().size() == 3);
 	}
 }
+
+//добавить тесты на вычисления

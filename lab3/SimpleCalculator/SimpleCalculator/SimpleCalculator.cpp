@@ -231,8 +231,7 @@ void SimpleCalculator::SetRelevantFunctionValue(const Func* func)
 
 }
 
-SimpleCalculator::Func SimpleCalculator::CreateFunctionStruct
-(
+SimpleCalculator::Func SimpleCalculator::CreateFunctionStruct(
 	const string& name,
 	const pair<string, ObjectType>& dep1, 
 	const pair<string, ObjectType>& dep2, 

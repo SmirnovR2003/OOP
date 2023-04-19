@@ -36,6 +36,7 @@ public:
 
 	bool CreateFunction(const std::string& name, const std::string& identifier1, const std::string& identifier2, Operations operation);
 
+	//добавить const
 	std::map<std::string, double> GetAllVariables();
 
 	std::map<std::string, double> GetAllFunctions();
@@ -43,7 +44,7 @@ public:
 	std::pair<std::string, double> GetIdentifier(const std::string& name);
 
 private:
-
+	//сделать рекурсию через стек
 	struct Func
 	{
 		std::string name;
