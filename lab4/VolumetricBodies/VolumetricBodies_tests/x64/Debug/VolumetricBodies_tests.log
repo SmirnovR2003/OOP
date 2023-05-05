@@ -1,4 +1,4 @@
-﻿  CSolidBody.cpp
+﻿  VolumetricBodies_tests.cpp
   VolumetricBodies_tests.vcxproj -> C:\roman\C++\OOP\lab4\VolumetricBodies\x64\Debug\VolumetricBodies_tests.exe
   
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -7,18 +7,19 @@
   
   -------------------------------------------------------------------------------
   Scenario: CCompound tests
-    Check with compound body with some shapes in compound body
+    Check with add compound body to the himself
   -------------------------------------------------------------------------------
   C:\roman\C++\OOP\lab4\VolumetricBodies\VolumetricBodies_tests\VolumetricBodies_tests.cpp(131)
   ...............................................................................
   
-  C:\roman\C++\OOP\lab4\VolumetricBodies\VolumetricBodies_tests\VolumetricBodies_tests.cpp(131): FAILED:
-EXEC : due to a fatal error condition: 
-    SIGSEGV - Segmentation violation signal
+  C:\roman\C++\OOP\lab4\VolumetricBodies\VolumetricBodies_tests\VolumetricBodies_tests.cpp(134): FAILED:
+    CHECK( !compoundBody.AddChildBody(make_shared<CCompound>(compoundBody)) )
+  with expansion:
+    false
   
   ===============================================================================
   test cases:  5 |  4 passed | 1 failed
-  assertions: 53 | 52 passed | 1 failed
+  assertions: 57 | 56 passed | 1 failed
   
 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: выход из команды "C:\roman\C++\OOP\lab4\VolumetricBodies\x64\Debug\VolumetricBodies_tests.exe
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: :VCEnd" с кодом -1073741819.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(157,5): error MSB3073: :VCEnd" с кодом 1.

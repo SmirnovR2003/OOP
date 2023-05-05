@@ -7,7 +7,7 @@ class CCompound :
     public CBody
 {
 public:
-    //CBody->CSolidBody->SimleBody
+    //CBody->CSolidBody->SimpleBody
     CCompound();
 
     ~CCompound();
@@ -29,6 +29,6 @@ private:
 
     std::vector<std::shared_ptr<CBody>> m_childs;
 
-    std::shared_ptr<CBody> m_father;
+    CBody* m_father;
 };
 

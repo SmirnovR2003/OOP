@@ -128,6 +128,12 @@ SCENARIO("CCompound tests")
 		CHECK(compoundBody.ToString() == "Compound:\n\tdensity = -nan(ind)\n\tvolume = 0\n\tmass = 0\n");
 	}
 
+	SECTION("Check with add compound body to the himself")
+	{
+		CCompound compoundBody;
+		CHECK(!compoundBody.AddChildBody(make_shared<CCompound>(compoundBody)));
+	}
+
 	SECTION("Check with compound body with some shapes in compound body")
 	{
 		CCompound compoundBody1, compoundBody2;

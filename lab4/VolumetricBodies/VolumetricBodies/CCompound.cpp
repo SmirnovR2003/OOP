@@ -7,23 +7,23 @@ CCompound::CCompound()
     , m_father()
 {
 }
-//посчтитать количество деструкторов
 CCompound::~CCompound()
 {
 }
 
+//тест на добавление самого себя
 bool CCompound::AddChildBody(const std::shared_ptr<CBody>& child)
 {
-    if (child.get()->GetType() == "Compound")
+    if (child.get()->GetType() == "Compound" )
     {
-        if (FindFather(child))
+        if (FindFather(child) && child.get() == this)
         {
             return false;
         }
         else
         {
             m_childs.push_back(child);
-            m_father = child;
+            m_father = child.get();
         }
     }
     else
@@ -71,7 +71,7 @@ bool CCompound::FindFather(const std::shared_ptr<CBody>& father)
     {
         if ((bool)m_father)
         {
-            return dynamic_cast<CCompound*>(m_father.get())->FindFather(father);
+            return dynamic_cast<CCompound*>(m_father)->FindFather(father);
         }
         else
         {

@@ -188,11 +188,13 @@ void FindAndShowShapeWithMaxMass(const vector<shared_ptr<CBody>>& bodies)
 
 int main()
 {
-    vector<shared_ptr<CBody>> bodies;
+    /*vector<shared_ptr<CBody>> bodies;
 
     ReadShapes(bodies);
     ShowShapesInfo(bodies);
     FindAndShowShapeWithMaxMass(bodies);
-    FindAndShowShapeWithMinMassInWater(bodies);
+    FindAndShowShapeWithMinMassInWater(bodies);*/
+    CCompound compoundBody;
+    (!compoundBody.AddChildBody(make_shared<CCompound>(compoundBody)));
 }
 

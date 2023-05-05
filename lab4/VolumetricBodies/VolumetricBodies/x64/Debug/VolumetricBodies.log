@@ -1,4 +1,10 @@
-﻿  CCompound.cpp
+﻿  CBody.cpp
+  CCompound.cpp
+  CCone.cpp
+  CCylinder.cpp
+  CParallelepiped.cpp
+  CSPhere.cpp
+  CSolidBody.cpp
   main.cpp
   Создание кода...
   VolumetricBodies.vcxproj -> C:\roman\C++\OOP\lab4\VolumetricBodies\x64\Debug\VolumetricBodies.exe

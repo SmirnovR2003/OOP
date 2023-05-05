@@ -17,9 +17,7 @@ public:
 	std::string ToString(int recursionDepth = 0) const;
 
 	std::string GetType();
-
-protected:
-
+	
 
 private:
 
