@@ -133,7 +133,7 @@ void CalculateDateWithDayCounter(unsigned& current_day, unsigned& current_month,
         }
     }
 }
-//убрать валидность
+
 CDate::CDate(unsigned day, Month month, unsigned year)
     :m_dayCounter(ConvertFromDateToDayCounter({ day, month, year }))
 {
@@ -274,7 +274,7 @@ bool CDate::operator>=(const CDate& date)const
 
 Date CDate::ConvertFromCurrentDayCounterToDate()const
 {
-    
+    //совсем без цикла
     unsigned current_year = 1970 + m_dayCounter / DAYS_IN_400_YEAR * 400;
     unsigned current_day = m_dayCounter % DAYS_IN_400_YEAR;
     unsigned current_month = 0;

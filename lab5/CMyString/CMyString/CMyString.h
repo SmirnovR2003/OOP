@@ -12,6 +12,7 @@ struct MyChar
 class CMyString
 {
 public:
+	class CIterator;
 	// конструктор по умолчанию
 	CMyString();
 
@@ -50,7 +51,7 @@ public:
 
 	// очистка строки (строка становится снова нулевой длины)
 	void Clear();
-
+	//добавить friend
 	CMyString& operator=(CMyString const& other);
 
 	CMyString& operator=(CMyString&& other)noexcept;
@@ -75,55 +76,139 @@ public:
 
 	bool operator>=(CMyString const& other)const;
 
-	const char& operator[](const size_t index)const;
-
-	char& operator[](const size_t index);
-
-	class CIterator 
+	//два класса дл const и не const
+	class CConstIterator //почитать как делать итератор
 	{
 		friend CMyString;
 
-		CIterator(char* ch);
+		CConstIterator(char* curr, char* first, char* last);
 
 	public:
 
+		typedef char iterator_type;
+		typedef std::random_access_iterator_tag iterator_category;
+		typedef iterator_type value_type;
+		typedef ptrdiff_t difference_type;
+		typedef const iterator_type& reference;
+		typedef const iterator_type* pointer;
+
+
+		CConstIterator() = default;
+
+		reference operator*();
+
+		 CConstIterator operator++();
+
+		 CConstIterator operator++(int);
+
+		 CConstIterator operator=(const CConstIterator& other);
+
+		 CConstIterator operator--();
+
+		 CConstIterator operator--(int);
+
+		 friend CConstIterator operator+(size_t count, const CConstIterator& other1);
+
+		 CConstIterator operator+(size_t number)const;
+
+		//ptrdiff_t
+		 friend difference_type operator-(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator==(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator!=(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator<(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator<=(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator>(const CConstIterator& other1, const CConstIterator& other2);
+
+		 friend bool operator>=(const CConstIterator& other1, const CConstIterator& other2);
+
+		 reference operator[](size_t number);
+
+	private:
+		iterator_type* m_curr = nullptr;
+
+		iterator_type* m_first = nullptr;
+
+		iterator_type* m_last = nullptr;
+	};
+
+	class CIterator : public CConstIterator //почитать как делать итератор
+	{
+		friend CMyString;
+
+		CIterator(char* curr, char* first, char* last);
+
+	public:
+
+		typedef char iterator_type;
+		typedef std::random_access_iterator_tag iterator_category;
+		typedef iterator_type value_type;
+		typedef ptrdiff_t difference_type;
+		typedef iterator_type& reference;
+		typedef iterator_type* pointer;
+
 		CIterator() = default;
 
-		const char operator*()const;
-
-		char& operator*();
+		reference operator*();
 
 		CIterator operator++();
 
 		CIterator operator++(int);
 
+		CIterator operator=(const CIterator& other);
+
 		CIterator operator--();
 
 		CIterator operator--(int);
 
-		friend CIterator operator+(int count, CIterator other);
+		friend CIterator operator+(size_t count, const CIterator& other1);
 
-		CIterator operator+(int number);
+		CIterator operator+(size_t number)const;
 
-		int operator-(const CIterator& other);
+		//ptrdiff_t
+		friend difference_type operator-(const CIterator& other1, const CIterator& other2);
 
-		bool operator==(const CIterator& other);
+		friend bool operator==(const CIterator& other1, const CIterator& other2);
 
-		bool operator!=(const CIterator& other);
+		friend bool operator!=(const CIterator& other1, const CIterator& other2);
+
+		friend bool operator<(const CIterator& other1, const CIterator& other2);
+
+		friend bool operator<=(const CIterator& other1, const CIterator& other2);
+
+		friend bool operator>(const CIterator& other1, const CIterator& other2);
+
+		friend bool operator>=(const CIterator& other1, const CIterator& other2);
+
+		reference operator[](int number);
 
 	private:
-		char* m_curr = nullptr;
+		iterator_type* m_curr = nullptr;
+
+		iterator_type* m_first = nullptr;
+
+		iterator_type* m_last = nullptr;
 	};
 
 	CIterator begin();
 
-	const CIterator end()const;
+	CIterator end();
+
+	CConstIterator begin()const;
+
+	CConstIterator end()const;
 
 private:
 
 	char* m_str;
+	//опечатка length
+	size_t m_length = 0;
 
-	size_t m_lenght = 0;
+	size_t m_capacity = 0;
 };
 
 inline std::ostream& operator<<(std::ostream& stream, CMyString const& other)

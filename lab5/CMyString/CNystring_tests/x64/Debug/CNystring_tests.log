@@ -1,8 +1,5 @@
-﻿  CMyString.cpp
-C:\roman\C++\OOP\lab5\CMyString\CMyString\CMyString.cpp(287,16): warning C4244: return: преобразование "__int64" в "int", возможна потеря данных
-  CNystring_tests.cpp
-  Создание кода...
+﻿  CNystring_tests.cpp
   CNystring_tests.vcxproj -> C:\roman\C++\OOP\lab5\CMyString\x64\Debug\CNystring_tests.exe
   ===============================================================================
-  All tests passed (213 assertions in 18 test cases)
+  All tests passed (250 assertions in 28 test cases)
   
