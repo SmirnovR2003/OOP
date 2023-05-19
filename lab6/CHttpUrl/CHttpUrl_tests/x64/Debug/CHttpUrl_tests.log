@@ -1,0 +1,8 @@
+﻿  CHttpUrl.cpp
+  CUrlParsingError.cpp
+  CHttpUrl_tests.cpp
+  Создание кода...
+  CHttpUrl_tests.vcxproj -> C:\roman\C++\OOP\lab6\CHttpUrl\x64\Debug\CHttpUrl_tests.exe
+  ===============================================================================
+  All tests passed (44 assertions in 6 test cases)
+  

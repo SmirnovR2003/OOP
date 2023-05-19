@@ -6,7 +6,12 @@
 #include <algorithm>
 #include "CMyString.h"
 
+using namespace std;
+
 int main()
 {
-    
+    CMyString str("qqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZCXVBNM");
+    cout << str << endl;
+    sort(str.begin(), str.end());
+    cout << str << endl;
 }

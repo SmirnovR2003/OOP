@@ -3,11 +3,6 @@
 #include <iterator>
 #include <iostream>
 
-struct MyChar
-{
-	char ch;
-	MyChar* MyCharPtr;
-};
 
 class CMyString
 {
@@ -64,18 +59,6 @@ public:
 
 	CMyString operator+=(CMyString const& other);
 
-	bool operator==(CMyString const& other)const;
-
-	bool operator!=(CMyString const& other)const;
-
-	bool operator<(CMyString const& other)const;
-
-	bool operator<=(CMyString const& other)const;
-
-	bool operator>(CMyString const& other)const;
-
-	bool operator>=(CMyString const& other)const;
-
 	//два класса дл const и не const
 	class CConstIterator //почитать как делать итератор
 	{
@@ -101,12 +84,15 @@ public:
 
 		 CConstIterator operator++(int);
 
+		 //возвращать ссылку
+		 //убрать
 		 CConstIterator operator=(const CConstIterator& other);
 
 		 CConstIterator operator--();
 
 		 CConstIterator operator--(int);
 
+		 //не size_t а ptrdiff_t
 		 friend CConstIterator operator+(size_t count, const CConstIterator& other1);
 
 		 CConstIterator operator+(size_t number)const;
@@ -126,6 +112,7 @@ public:
 
 		 friend bool operator>=(const CConstIterator& other1, const CConstIterator& other2);
 
+		 //ptrdiff_t
 		 reference operator[](size_t number);
 
 	private:
@@ -153,7 +140,7 @@ public:
 
 		CIterator() = default;
 
-		reference operator*();
+		reference operator*()const;
 
 		CIterator operator++();
 
@@ -168,6 +155,8 @@ public:
 		friend CIterator operator+(size_t count, const CIterator& other1);
 
 		CIterator operator+(size_t number)const;
+
+		CIterator operator-(size_t number)const;
 
 		//ptrdiff_t
 		friend difference_type operator-(const CIterator& other1, const CIterator& other2);
@@ -184,7 +173,7 @@ public:
 
 		friend bool operator>=(const CIterator& other1, const CIterator& other2);
 
-		reference operator[](int number);
+		reference operator[](size_t number);
 
 	private:
 		iterator_type* m_curr = nullptr;
@@ -203,9 +192,10 @@ public:
 	CConstIterator end()const;
 
 private:
+	CMyString(char* data, size_t length, size_t capacity);
 
-	char* m_str;
-	//опечатка length
+	char* m_str = nullptr;
+
 	size_t m_length = 0;
 
 	size_t m_capacity = 0;

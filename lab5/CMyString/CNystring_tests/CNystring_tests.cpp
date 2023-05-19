@@ -307,6 +307,15 @@ SCENARIO("operator+(const char* other) tests")
 		CHECK(CheckEquals((str1 + str2).GetStringData(), "", 0, 0));
 	}
 
+	SECTION("Check with nullptr")
+	{
+		CMyString str1("");
+
+		CHECK(CheckEquals(str1.GetStringData(), "", 0, 0));
+
+		CHECK(CheckEquals((str1 + nullptr).GetStringData(), "", 0, 0));
+	}
+
 	SECTION("Check with one char strings")
 	{
 		CMyString str1("s");

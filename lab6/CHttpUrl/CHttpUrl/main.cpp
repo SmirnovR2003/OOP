@@ -2,19 +2,47 @@
 //
 
 #include <iostream>
+#include <limits>
+#include"CHttpUrl.h"
+#include"CUrlParsingError.h"
+using namespace std;
+
+ostream& operator<<(ostream& os, Protocol protocol)
+{
+	if (Protocol::HTTP == protocol)
+	{
+		os << "http";
+	}
+	else if (Protocol::HTTPS == protocol)
+	{
+		os << "https";
+	}
+	return os;
+}
+
+void PrintInfo(const CHttpUrl& url)
+{
+	cout << url.GetURL() << endl;
+	cout << "\tprotocol:" << url.GetProtocol() << endl;
+	cout << "\tdomain:" << url.GetDomain() << endl;
+	cout << "\tport:" << url.GetPort() << endl;
+	cout << "\tdocument:" << url.GetDocument() << endl;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	string stringUrl;
+
+	while (cin >> stringUrl)
+	{
+		try
+		{
+			CHttpUrl url(stringUrl);
+			PrintInfo(url);
+		}
+		catch(const CUrlParsingError& ex)
+		{
+			cout << ex.what() << endl;
+		}
+	}
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.

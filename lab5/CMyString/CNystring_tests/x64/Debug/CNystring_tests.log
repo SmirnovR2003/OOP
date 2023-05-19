@@ -1,5 +1,7 @@
-﻿  CNystring_tests.cpp
+﻿  CMyString.cpp
+  CNystring_tests.cpp
+  Создание кода...
   CNystring_tests.vcxproj -> C:\roman\C++\OOP\lab5\CMyString\x64\Debug\CNystring_tests.exe
   ===============================================================================
-  All tests passed (250 assertions in 28 test cases)
+  All tests passed (252 assertions in 28 test cases)
   

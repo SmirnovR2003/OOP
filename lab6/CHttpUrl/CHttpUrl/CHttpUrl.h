@@ -12,6 +12,7 @@ enum class Protocol
 class CHttpUrl
 {
 public:
+
 	// выполн€ет парсинг строкового представлени€ URL-а, в случае ошибки парсинга
 	// выбрасыват исключение CUrlParsingError, содержащее текстовое описание ошибки
 	CHttpUrl(std::string const& url);
@@ -64,6 +65,8 @@ private:
 	std::string m_document;
 	Protocol m_protocol = Protocol::HTTP;
 	unsigned short m_port = 0;
+
+	void ParseUrl(std::string const& url);
 };
 
 

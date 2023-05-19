@@ -2,10 +2,16 @@
 #include<string.h>
 #include <stdexcept> 
 
-const char* STRING_WITH_ZERO_CHAR = "\0";
+//это nullptr
+
+char ZERO_CHAR = '\0';
+
+char* STRING_WITH_ZERO_CHAR = &ZERO_CHAR;
+
+
 
 //аналог strcmp, но сравнивает с учетом длины
-int strcmpWithLengths(const char* s1, const char* s2, size_t length1, size_t length2)
+int StrcmpWithLengths(const char* s1, const char* s2, size_t length1, size_t length2)
 {
 	size_t minLength = std::min(length1, length2);
 
@@ -34,16 +40,25 @@ int strcmpWithLengths(const char* s1, const char* s2, size_t length1, size_t len
 		return -1;
 	}
 }
+CMyString(char* data, size_t length, size_t capacity)
+{
+
+}
 
 CMyString ConcatStrings(const char* s1, const char* s2, size_t length1, size_t length2)
 {
 	size_t bufferSize = length1 + length2 + 1;
 	char* concatString = (new char[bufferSize]);
 
-	memcpy(concatString, s1, length1 + 1);
-	memcpy(concatString + length1, s2, length2 + 1);
+	memcpy(concatString, s1, length1);
+	memcpy(concatString + length1, s2, length2);
+	concatString[bufferSize] = '\0';
 
-	return concatString;
+	CMyString temp(concatString, bufferSize - 1);//утечка памяти если выбросится исключение
+
+	delete[] concatString;
+
+	return temp; // симво '\0'
 }
 
 CMyString::CMyString()
@@ -54,10 +69,8 @@ CMyString::CMyString()
 	m_str[0] = '\0';
 }
 
-//делегирующий конструктор
 CMyString::CMyString(const char* pString)
-//вычисление дважды length
-	: CMyString(pString, strlen(pString))
+	: CMyString(pString ? pString : STRING_WITH_ZERO_CHAR, pString ? strlen(pString) : 0)
 {
 }
 
@@ -71,26 +84,33 @@ CMyString::CMyString(const char* pString, size_t length)
 }
 
 CMyString::CMyString(CMyString const& other)
-	: CMyString(other.m_str, other.m_length)
+	: CMyString(other.m_str ? other.m_str : STRING_WITH_ZERO_CHAR, other.m_str ? other.m_length : 0)
+	
 {
 }
 
 CMyString::CMyString(CMyString&& other) noexcept
-	: CMyString(other.m_str, other.m_length)
 {
-	other.m_str = nullptr;
-	other.m_length = 0;
-	other.m_capacity = 0;
+	if (&other != this)
+	{
+		std::swap(m_str, other.m_str);
+		std::swap(m_length, other.m_length);
+		std::swap(m_capacity, other.m_capacity);
+
+		if (other.m_str != STRING_WITH_ZERO_CHAR)
+		{
+			delete[] other.m_str;
+			other.m_str = nullptr;
+			other.m_length = 0;
+			other.m_capacity = 0;
+		}
+		
+	}
 }
 
 CMyString::CMyString(std::string const& stlString)
-	: m_str(new char[stlString.size()+1])
-	, m_length(stlString.size())
+	: CMyString(stlString.c_str(), stlString.size())
 {
-	const char* s = stlString.c_str();
-
-	memcpy(m_str, s, m_length);
-	m_str[m_length] = '\0';
 }
 
 CMyString::~CMyString()
@@ -122,7 +142,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 	}
 	CMyString res(new char[length + 1], length);
 
-	memcpy(res.m_str, m_str + start, length);
+	memcpy(res.m_str, m_str + start, length);//nullptr
 	
 	return res;
 }
@@ -131,7 +151,7 @@ void CMyString::Clear()
 {
 	//сделать capacity
 	m_length = 0;
-	m_str[0] = '\0';
+	if(m_str) m_str[0] = '\0';//разыименнование nullptr
 }
 
 CMyString& CMyString::operator=(CMyString const& other)
@@ -156,7 +176,7 @@ CMyString& CMyString::operator=(CMyString&& other) noexcept
 		std::swap(m_capacity, other.m_capacity);
 
 		//nullptr
-		if (other.m_str)
+		if (other.m_str != STRING_WITH_ZERO_CHAR)
 		{
 			delete[]m_str;
 			other.m_str = nullptr;
@@ -169,17 +189,17 @@ CMyString& CMyString::operator=(CMyString&& other) noexcept
 //дублирование кода
 CMyString CMyString::operator+(CMyString const& other) const
 {
-	return ConcatStrings(m_str, other.m_str, m_length, other.m_length);
+	return ConcatStrings(m_str ? m_str : STRING_WITH_ZERO_CHAR, other.m_str ? other.m_str : STRING_WITH_ZERO_CHAR, m_length, other.m_length);
 }
 
 CMyString CMyString::operator+(std::string const& str) const
 {
-	return ConcatStrings(m_str, str.c_str(), m_length,str.size());
+	return ConcatStrings(m_str ? m_str : STRING_WITH_ZERO_CHAR, str.c_str(), m_length,str.size());
 }
 
 CMyString CMyString::operator+(const char* other) const
 {
-	return ConcatStrings(m_str, other, m_length, strlen(other));
+	return ConcatStrings(m_str ? m_str : STRING_WITH_ZERO_CHAR, other ? other : STRING_WITH_ZERO_CHAR, m_length, other ? strlen(other) : 0);
 }
 
 CMyString CMyString::operator+=(CMyString const& other)
@@ -187,16 +207,22 @@ CMyString CMyString::operator+=(CMyString const& other)
 	size_t bufferSize = m_length + other.m_length + 1;
 	if (bufferSize < m_capacity)
 	{
-		memcpy(m_str + m_length, other.m_str, other.m_length + 1);
+		if (m_str == STRING_WITH_ZERO_CHAR)
+		{
+			m_str = new char[other.m_length];
+		}
+		memcpy(m_str + m_length, other.m_str ? other.m_str : STRING_WITH_ZERO_CHAR, other.m_str ? other.m_length + 1 : 1);
+
+
 	}
 	else
 	{
 		char* concatString = new char[bufferSize];
 
-		memcpy(concatString, m_str, m_length + 1);
-		memcpy(concatString + m_length, other.m_str, other.m_length + 1);
+		memcpy(concatString, m_str ? m_str : STRING_WITH_ZERO_CHAR, m_length + 1);
+		memcpy(concatString + m_length, other.m_str ? other.m_str : STRING_WITH_ZERO_CHAR, other.m_length + 1);
 
-		delete[] m_str;
+		if(m_str!=STRING_WITH_ZERO_CHAR) delete[] m_str;
 		m_str = concatString;
 		m_capacity = bufferSize - 1;
 	}
@@ -205,54 +231,24 @@ CMyString CMyString::operator+=(CMyString const& other)
 	return *this;
 }
 
-bool CMyString::operator==(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) == 0;
-}
-
-bool CMyString::operator!=(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) != 0;
-}
-
-bool CMyString::operator<(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) < 0;
-}
-
-bool CMyString::operator<=(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) <= 0;
-}
-
-bool CMyString::operator>(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) > 0;
-}
-
-bool CMyString::operator>=(CMyString const& other) const
-{
-	return strcmpWithLengths(m_str, other.m_str, m_length, other.m_length) >= 0;
-}
-
 CMyString::CConstIterator CMyString::begin()const
 {
-	return CConstIterator(m_str, m_str, m_str + m_length);
+	return CConstIterator(m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR);
 }
 
 CMyString::CConstIterator CMyString::end()const
 {
-	return CConstIterator(m_str + m_length, m_str, m_str + m_length);
+	return CConstIterator(m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR, m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR);
 }
 
 CMyString::CIterator CMyString::begin()
 {
-	return CIterator(m_str, m_str, m_str + m_length);
+	return CIterator(m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR);
 }
 
 CMyString::CIterator CMyString::end()
 {
-	return CIterator(m_str + m_length, m_str, m_str + m_length);
+	return CIterator(m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR, m_str ? m_str : STRING_WITH_ZERO_CHAR, m_str ? m_str + m_length : STRING_WITH_ZERO_CHAR);
 }
 
 CMyString::CConstIterator::CConstIterator(char* curr, char* first, char* last)
@@ -269,7 +265,7 @@ CMyString::CIterator::CIterator(char* curr, char* first, char* last)
 {
 }
 
-CMyString::CIterator::reference CMyString::CIterator::operator*()
+CMyString::CIterator::reference CMyString::CIterator::operator*()const
 {
 	return *m_curr;
 }
@@ -326,6 +322,7 @@ CMyString::CConstIterator operator+(size_t count, const CMyString::CConstIterato
 
 CMyString::CConstIterator CMyString::CConstIterator::operator+(size_t number) const
 {
+	//переделать без выхода за пределы массива
 	if (m_curr + number > m_last)throw std::out_of_range("out of range");
 	CMyString::CConstIterator it(m_curr + number, m_first, m_last);
 	return it;
@@ -412,15 +409,22 @@ CMyString::CIterator CMyString::CIterator::operator--(int)
 
 CMyString::CIterator operator+(size_t count, const CMyString::CIterator& other1)
 {
-	if (other1.m_curr + count > other1.m_last)throw std::out_of_range("out of range");
+	if (other1.m_curr + count >= other1.m_last)throw std::out_of_range("out of range");
 	CMyString::CIterator it(other1.m_curr + count, other1.m_first, other1.m_last);
 	return it;
 }
 
 CMyString::CIterator CMyString::CIterator::operator+(size_t number) const
 {
-	if (m_curr + number > m_last)throw std::out_of_range("out of range");
+	if (m_curr + number >= m_last)throw std::out_of_range("out of range");
 	CMyString::CIterator it(m_curr + number, m_first, m_last);
+	return it;
+}
+
+CMyString::CIterator CMyString::CIterator::operator-(size_t number) const
+{
+	if (m_curr - number < m_first) throw std::out_of_range("out of range");
+	CMyString::CIterator it(m_curr - number, m_first, m_last);
 	return it;
 }
 
@@ -459,7 +463,7 @@ bool operator>=(const CMyString::CIterator& other1, const CMyString::CIterator& 
 	return other1.m_curr >= other2.m_curr;
 }
 
-CMyString::CIterator::reference CMyString::CIterator::operator[](int number)
+CMyString::CIterator::reference CMyString::CIterator::operator[](size_t number)
 {
 	if (m_curr + number < m_first || m_curr + number >= m_last) throw std::out_of_range("out of range");
 	return *(m_curr + number);
