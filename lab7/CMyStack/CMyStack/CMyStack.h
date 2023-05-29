@@ -1,6 +1,6 @@
 #pragma once
 
-const size_t MAX_STACK_SIZE = std::numeric_limits<size_t>::max();
+constexpr size_t MAX_STACK_SIZE = std::numeric_limits<size_t>::max();
 
 template<typename T>
 class CMyStack
@@ -12,7 +12,7 @@ public:
 
     ~CMyStack() noexcept
     {
-        DeleteStack(*this);
+        Clear();
     }
 
     CMyStack(const CMyStack<T>& other)
@@ -22,7 +22,22 @@ public:
             return;
         }
 
-        CopyStack(other);
+        CMyStack tempStack;
+
+        MyItem* tempOtherItem = other.m_top;
+        tempStack.m_top = new MyItem(*tempOtherItem);
+        MyItem* tempItem = tempStack.m_top;
+
+        while (tempOtherItem->next)
+        {
+            tempOtherItem = tempOtherItem->next;
+            tempItem->next = new MyItem(*tempOtherItem);
+            tempItem = tempItem->next;
+            ++m_size;
+        }
+
+        std::swap(m_top, tempStack.m_top);
+        std::swap(m_size, tempStack.m_size);
     }
 
     CMyStack(CMyStack<T>&& other)noexcept
@@ -33,14 +48,14 @@ public:
         other.m_size = 0;
     }
 
-    void Push(const T& str)
+    void Push(const T& el)
     {
         if (MAX_STACK_SIZE == m_size)
         {
-            throw std::runtime_error("stack already had max size");
+            throw std::runtime_error("stack already has max size");
         }
 
-        MyItem* tempItem = new MyItem({ str, m_top });
+        MyItem* tempItem = new MyItem({ el, m_top });
         m_top = tempItem;
         ++m_size;
     }
@@ -74,21 +89,33 @@ public:
 
     void Clear()
     {
-        DeleteStack(*this);
+        if (m_top)
+        {
+            while (m_top->next)
+            {
+                MyItem* tempItem = m_top;
+                m_top = m_top->next;
+                delete tempItem;
+            }
+            delete m_top;
+        }
+        m_top = nullptr;
+        m_size = 0;
+    }
+    
+    bool Empty() const
+    {
+        return m_size == 0;
     }
 
     CMyStack<T>& operator=(const CMyStack<T>& other)
     {
         if (this == &other) return *this;
 
-        DeleteStack(*this);
+        CMyStack tempStack(other);
 
-        if (!other.m_top)
-        {
-            return *this;
-        }
-
-        CopyStack(other);
+        std::swap(m_top, tempStack.m_top);
+        std::swap(m_size, tempStack.m_size);
 
         return *this;
     }
@@ -96,10 +123,11 @@ public:
     CMyStack<T>& operator=(CMyStack<T>&& other)noexcept
     {
         if (this == &other) return *this;
-        std::swap(m_top, other.m_top);
-        std::swap(m_size, other.m_size);
 
-        DeleteStack(other);
+        CMyStack tempStack(std::move(other));
+
+        std::swap(m_top, tempStack.m_top);
+        std::swap(m_size, tempStack.m_size);
 
         return *this;
     }
@@ -115,57 +143,6 @@ private:
     MyItem* m_top = nullptr;
 
     size_t m_size = 0;
-
-    void DeleteStack(CMyStack<T>& other)
-    {
-        if (other.m_top)
-        {
-            while (other.m_top->next)
-            {
-                MyItem* tempItem = other.m_top;
-                other.m_top = other.m_top->next;
-                delete tempItem;
-            }
-            delete other.m_top;
-        }
-        other.m_top = nullptr;
-        m_size = 0;
-    }
-
-    void CopyStack(const CMyStack<T>& source)
-    {
-        if (!source.m_top)
-        {
-            m_top = nullptr;
-            m_size = 0;
-            return;
-        }
-
-        CMyStack<T> backupStack;
-        backupStack.m_top = m_top;
-        backupStack.m_size = m_size;
-        try
-        {
-            MyItem* tempOtherItem = source.m_top;
-            m_top = new MyItem(*tempOtherItem);
-            MyItem* tempItem = m_top;
-
-            while (tempOtherItem->next)
-            {
-                tempOtherItem = tempOtherItem->next;
-                tempItem->next = new MyItem(*tempOtherItem);
-                tempItem = tempItem->next;
-                ++m_size;
-            }
-        }
-        catch (const std::bad_alloc&)
-        {
-            DeleteStack(*this);
-            m_top = backupStack.m_top;
-            m_size = backupStack.m_size;
-            throw;
-        }
-    }
 };
 
 

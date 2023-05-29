@@ -2,13 +2,12 @@
 #include<string.h>
 #include <stdexcept> 
 
-//это nullptr
+using namespace std;
+
 
 char ZERO_CHAR = '\0';
 
 char* STRING_WITH_ZERO_CHAR = &ZERO_CHAR;
-
-
 
 //аналог strcmp, но сравнивает с учетом длины
 int StrcmpWithLengths(const char* s1, const char* s2, size_t length1, size_t length2)
@@ -39,11 +38,11 @@ int StrcmpWithLengths(const char* s1, const char* s2, size_t length1, size_t len
 	{
 		return -1;
 	}
-}
-CMyString(char* data, size_t length, size_t capacity)
+}/*
+CMyString(char* data, std::ptrdiff_t length, std::ptrdiff_t capacity)
 {
 
-}
+};*/
 
 CMyString ConcatStrings(const char* s1, const char* s2, size_t length1, size_t length2)
 {
@@ -290,14 +289,6 @@ CMyString::CConstIterator CMyString::CConstIterator::operator++(int)
 	return Temp;
 }
 
-CMyString::CConstIterator CMyString::CConstIterator::operator=(const CConstIterator& other)
-{
-	m_curr = other.m_curr;
-	m_first = other.m_first;
-	m_last = other.m_last;
-	return *this;
-}
-
 CMyString::CConstIterator CMyString::CConstIterator::operator--()
 {
 	if (m_curr == m_first)throw std::out_of_range("out of range");
@@ -313,14 +304,14 @@ CMyString::CConstIterator CMyString::CConstIterator::operator--(int)
 	return Temp;
 }
 
-CMyString::CConstIterator operator+(size_t count, const CMyString::CConstIterator& other1)
+CMyString::CConstIterator operator+(std::ptrdiff_t count, const CMyString::CConstIterator& other1)
 {
 	if (other1.m_curr + count > other1.m_last)throw std::out_of_range("out of range");
 	CMyString::CConstIterator it(other1.m_curr + count, other1.m_first, other1.m_last);
 	return it;
 }
 
-CMyString::CConstIterator CMyString::CConstIterator::operator+(size_t number) const
+CMyString::CConstIterator CMyString::CConstIterator::operator+(std::ptrdiff_t number) const
 {
 	//переделать без выхода за пределы массива
 	if (m_curr + number > m_last)throw std::out_of_range("out of range");
@@ -363,7 +354,7 @@ bool operator>=(const CMyString::CConstIterator& other1, const CMyString::CConst
 	return other1.m_curr >= other2.m_curr;
 }
 
-CMyString::CConstIterator::reference CMyString::CConstIterator::operator[](size_t number)
+CMyString::CConstIterator::reference CMyString::CConstIterator::operator[](std::ptrdiff_t number)
 {
 	if (m_curr + number < m_first || m_curr + number >= m_last) throw std::out_of_range("out of range");
 	return *(m_curr + number);
@@ -384,14 +375,6 @@ CMyString::CIterator CMyString::CIterator::operator++(int)
 	return Temp;
 }
 
-CMyString::CIterator CMyString::CIterator::operator=(const CIterator& other)
-{
-	m_curr = other.m_curr;
-	m_first = other.m_first;
-	m_last = other.m_last;
-	return *this;
-}
-
 CMyString::CIterator CMyString::CIterator::operator--()
 {
 	if (m_curr == m_first)throw std::out_of_range("out of range");
@@ -407,21 +390,21 @@ CMyString::CIterator CMyString::CIterator::operator--(int)
 	return Temp;
 }
 
-CMyString::CIterator operator+(size_t count, const CMyString::CIterator& other1)
+CMyString::CIterator operator+(std::ptrdiff_t count, const CMyString::CIterator& other1)
 {
 	if (other1.m_curr + count >= other1.m_last)throw std::out_of_range("out of range");
 	CMyString::CIterator it(other1.m_curr + count, other1.m_first, other1.m_last);
 	return it;
 }
 
-CMyString::CIterator CMyString::CIterator::operator+(size_t number) const
+CMyString::CIterator CMyString::CIterator::operator+(std::ptrdiff_t number) const
 {
 	if (m_curr + number >= m_last)throw std::out_of_range("out of range");
 	CMyString::CIterator it(m_curr + number, m_first, m_last);
 	return it;
 }
 
-CMyString::CIterator CMyString::CIterator::operator-(size_t number) const
+CMyString::CIterator CMyString::CIterator::operator-(std::ptrdiff_t number) const
 {
 	if (m_curr - number < m_first) throw std::out_of_range("out of range");
 	CMyString::CIterator it(m_curr - number, m_first, m_last);
@@ -463,7 +446,7 @@ bool operator>=(const CMyString::CIterator& other1, const CMyString::CIterator& 
 	return other1.m_curr >= other2.m_curr;
 }
 
-CMyString::CIterator::reference CMyString::CIterator::operator[](size_t number)
+CMyString::CIterator::reference CMyString::CIterator::operator[](std::ptrdiff_t number)
 {
 	if (m_curr + number < m_first || m_curr + number >= m_last) throw std::out_of_range("out of range");
 	return *(m_curr + number);

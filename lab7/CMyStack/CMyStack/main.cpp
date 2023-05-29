@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 int main()
 {
 	CMyStack<int> intStack;
@@ -24,7 +25,7 @@ int main()
 	CMyStack<string> stringStack;
 	for (int i = 0; i < 100; ++i)
 	{
-		stringStack.Push(to_string(i));
+		stringStack.Push("number" + to_string(i));
 	}
 	cout << "Stack size is " << stringStack.Size() << endl;
 	cout << "Top element is " << stringStack.Top() << endl;

@@ -14,4 +14,5 @@ int main()
     cout << str << endl;
     sort(str.begin(), str.end());
     cout << str << endl;
+    copy(str.begin(), str.end(), ostream_iterator<char>(cout, ""));
 }

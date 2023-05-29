@@ -14,7 +14,8 @@ int main()
 	CStringStack stack1;
 	CStringStack stack2;
 	stack1.Push("asd");
-	stack2 = stack1;
+	stack2 = move(stack1);
+	stack1.Push("asd2");
 	cout << (stack2.Top() == "asd");
 }
 

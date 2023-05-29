@@ -3,7 +3,6 @@
 #include <iterator>
 #include <iostream>
 
-
 class CMyString
 {
 public:
@@ -17,7 +16,7 @@ public:
 
 	// конструктор, инициализирующий строку данными из 
 	// символьного массива заданной длины
-	CMyString(const char* pString, size_t length);
+	CMyString(const char* pString, std::size_t length);
 
 	// конструктор копирования
 	CMyString(CMyString const& other);
@@ -34,7 +33,7 @@ public:
 	~CMyString();
 
 	// возвращает длину строки (без учета завершающего нулевого символа)
-	size_t GetLength()const;
+	std::size_t GetLength()const;
 
 	// возвращает указатель на массив символов строки.
 	// В конце массива обязательно должен быть завершающий нулевой символ
@@ -42,7 +41,7 @@ public:
 	const char* GetStringData()const;
 
 	// возвращает подстроку с заданной позиции длиной не больше length символов
-	CMyString SubString(size_t start, size_t length = SIZE_MAX)const;
+	CMyString SubString(std::size_t start, std::size_t length = SIZE_MAX)const;
 
 	// очистка строки (строка становится снова нулевой длины)
 	void Clear();
@@ -71,7 +70,7 @@ public:
 		typedef char iterator_type;
 		typedef std::random_access_iterator_tag iterator_category;
 		typedef iterator_type value_type;
-		typedef ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef const iterator_type& reference;
 		typedef const iterator_type* pointer;
 
@@ -84,18 +83,14 @@ public:
 
 		 CConstIterator operator++(int);
 
-		 //возвращать ссылку
-		 //убрать
-		 CConstIterator operator=(const CConstIterator& other);
-
 		 CConstIterator operator--();
 
 		 CConstIterator operator--(int);
 
 		 //не size_t а ptrdiff_t
-		 friend CConstIterator operator+(size_t count, const CConstIterator& other1);
+		 friend CConstIterator operator+(std::ptrdiff_t count, const CConstIterator& other1);
 
-		 CConstIterator operator+(size_t number)const;
+		 CConstIterator operator+(std::ptrdiff_t number)const;
 
 		//ptrdiff_t
 		 friend difference_type operator-(const CConstIterator& other1, const CConstIterator& other2);
@@ -113,7 +108,7 @@ public:
 		 friend bool operator>=(const CConstIterator& other1, const CConstIterator& other2);
 
 		 //ptrdiff_t
-		 reference operator[](size_t number);
+		 reference operator[](std::ptrdiff_t number);
 
 	private:
 		iterator_type* m_curr = nullptr;
@@ -123,7 +118,7 @@ public:
 		iterator_type* m_last = nullptr;
 	};
 
-	class CIterator : public CConstIterator //почитать как делать итератор
+	class CIterator : public CConstIterator 
 	{
 		friend CMyString;
 
@@ -134,7 +129,7 @@ public:
 		typedef char iterator_type;
 		typedef std::random_access_iterator_tag iterator_category;
 		typedef iterator_type value_type;
-		typedef ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef iterator_type& reference;
 		typedef iterator_type* pointer;
 
@@ -142,21 +137,19 @@ public:
 
 		reference operator*()const;
 
-		CIterator operator++();
+		CIterator& operator++();
 
-		CIterator operator++(int);
-
-		CIterator operator=(const CIterator& other);
+		CIterator& operator++(int);
 
 		CIterator operator--();
 
 		CIterator operator--(int);
 
-		friend CIterator operator+(size_t count, const CIterator& other1);
+		friend CIterator operator+(std::ptrdiff_t count, const CIterator& other1);
 
-		CIterator operator+(size_t number)const;
+		CIterator operator+(std::ptrdiff_t number)const;
 
-		CIterator operator-(size_t number)const;
+		CIterator operator-(std::ptrdiff_t number)const;
 
 		//ptrdiff_t
 		friend difference_type operator-(const CIterator& other1, const CIterator& other2);
@@ -173,7 +166,7 @@ public:
 
 		friend bool operator>=(const CIterator& other1, const CIterator& other2);
 
-		reference operator[](size_t number);
+		reference operator[](std::ptrdiff_t number);
 
 	private:
 		iterator_type* m_curr = nullptr;
@@ -192,13 +185,13 @@ public:
 	CConstIterator end()const;
 
 private:
-	CMyString(char* data, size_t length, size_t capacity);
+	//CMyString(char* data, std::ptrdiff_t length, std::ptrdiff_t capacity);
 
 	char* m_str = nullptr;
 
-	size_t m_length = 0;
+	std::size_t m_length = 0;
 
-	size_t m_capacity = 0;
+	std::size_t m_capacity = 0;
 };
 
 inline std::ostream& operator<<(std::ostream& stream, CMyString const& other)

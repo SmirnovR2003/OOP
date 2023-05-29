@@ -204,6 +204,75 @@ SCENARIO("Pop function tests")
 	}
 }
 
+SCENARIO("Clear function tests")
+{
+	SECTION("Check with empty stack")
+	{
+		CMyStack<string> stackString;
+		CHECK_NOTHROW(stackString.Clear());
+
+		CMyStack<int> stackInt;
+		CHECK_NOTHROW(stackInt.Clear());
+	}
+
+	SECTION("Check stack with one element")
+	{
+		CMyStack<string> stackString;
+		stackString.Push("asd");
+		CHECK(stackString.Top() == "asd");
+		CHECK_NOTHROW(stackString.Clear());
+		CHECK_THROWS_AS(stackString.Pop(), runtime_error);
+
+		CMyStack<int> stackInt;
+		stackInt.Push(1);
+		CHECK(stackInt.Top() == 1);
+		CHECK_NOTHROW(stackInt.Clear());
+		CHECK_THROWS_AS(stackInt.Pop(), runtime_error);
+	}
+
+	SECTION("Check stack with any elements")
+	{
+		CMyStack<string> stackString;
+		stackString.Push("asd1");
+		stackString.Push("asd2");
+		stackString.Push("asd3");
+		CHECK(stackString.Top() == "asd3");
+		CHECK_NOTHROW(stackString.Clear());
+		CHECK_THROWS_AS(stackString.Pop(), runtime_error);
+
+		CMyStack<int> stackInt;
+		stackInt.Push(1);
+		stackInt.Push(2);
+		stackInt.Push(3);
+		CHECK(stackInt.Top() == 3);
+		CHECK_NOTHROW(stackInt.Clear());
+		CHECK_THROWS_AS(stackInt.Pop(), runtime_error);
+	}
+}
+
+SCENARIO("Empty function tests")
+{
+	SECTION("Check with empty stack")
+	{
+		CMyStack<string> stackString;
+		CHECK(stackString.Empty());
+
+		CMyStack<int> stackInt;
+		CHECK(stackInt.Empty());
+	}
+
+	SECTION("Check with not empty stack")
+	{
+		CMyStack<string> stackString;
+		stackString.Push("asd");
+		CHECK(!stackString.Empty());
+
+		CMyStack<int> stackInt;
+		stackInt.Push(1);
+		CHECK(!stackInt.Empty());
+	}
+}
+
 SCENARIO("operator=(const CMyStack& other) function tests")
 {
 	SECTION("Check with empty stack")
@@ -241,6 +310,9 @@ SCENARIO("operator=(const CMyStack& other) function tests")
 		stackString1.Push("asd3");
 		CHECK_NOTHROW(stackString2 = stackString1);
 		CHECK(stackString2.Top() == "asd3");
+		stackString1.Push("asd4");
+		CHECK(stackString1.Top() == "asd4");
+		CHECK(stackString2.Top() == "asd3");
 
 		CMyStack<int> stackInt1;
 		CMyStack<int> stackInt2;
@@ -249,6 +321,26 @@ SCENARIO("operator=(const CMyStack& other) function tests")
 		stackInt1.Push(3);
 		CHECK_NOTHROW(stackInt2 = stackInt1);
 		CHECK(stackInt2.Top() == 3);
+		stackInt1.Push(4);
+		CHECK(stackInt1.Top() == 4);
+		CHECK(stackInt2.Top() == 3);
+	}
+
+	SECTION("Check with copy into yourself")
+	{
+		CMyStack<string> stackString1;
+		stackString1.Push("asd1");
+		stackString1.Push("asd2");
+		stackString1.Push("asd3");
+		CHECK_NOTHROW(stackString1 = stackString1);
+		CHECK(stackString1.Top() == "asd3");
+
+		CMyStack<int> stackInt1;
+		stackInt1.Push(1);
+		stackInt1.Push(2);
+		stackInt1.Push(3);
+		CHECK_NOTHROW(stackInt1 = stackInt1);
+		CHECK(stackInt1.Top() == 3);
 	}
 }
 
@@ -289,6 +381,7 @@ SCENARIO("operator=(CMyStack&& other) function tests")
 		stackString1.Push("asd3");
 		CHECK_NOTHROW(stackString2 = move(stackString1));
 		CHECK(stackString2.Top() == "asd3");
+		CHECK_THROWS_AS(stackString1.Pop(), runtime_error);
 
 		CMyStack<int> stackInt1;
 		CMyStack<int> stackInt2;
@@ -297,5 +390,23 @@ SCENARIO("operator=(CMyStack&& other) function tests")
 		stackInt1.Push(3);
 		CHECK_NOTHROW(stackInt2 = move(stackInt1));
 		CHECK(stackInt2.Top() == 3);
+		CHECK_THROWS_AS(stackInt1.Pop(), runtime_error);
+	}
+
+	SECTION("Check with copy into yourself")
+	{
+		CMyStack<string> stackString1;
+		stackString1.Push("asd1");
+		stackString1.Push("asd2");
+		stackString1.Push("asd3");
+		CHECK_NOTHROW(stackString1 = move(stackString1));
+		CHECK(stackString1.Top() == "asd3");
+
+		CMyStack<int> stackInt1;
+		stackInt1.Push(1);
+		stackInt1.Push(2);
+		stackInt1.Push(3);
+		CHECK_NOTHROW(stackInt1 = move(stackInt1));
+		CHECK(stackInt1.Top() == 3);
 	}
 }

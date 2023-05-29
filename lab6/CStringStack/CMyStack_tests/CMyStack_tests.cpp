@@ -159,16 +159,32 @@ SCENARIO("operator=(const CStringStack& other) function tests")
 		stack1.Push("asd3");
 		CHECK_NOTHROW(stack2 = stack1);
 		CHECK(stack2.Top() == "asd3");
+		//произвести действия после присваивания
+		stack1.Push("asd4");
+		CHECK(stack1.Top() == "asd4");
+		CHECK(stack2.Top() == "asd3");
+	}
+
+	SECTION("Check with copy into yourself")
+	{
+		CStringStack stack1;
+		stack1.Push("asd1");
+		stack1.Push("asd2");
+		stack1.Push("asd3");
+		CHECK_NOTHROW(stack1 = stack1);
+		CHECK(stack1.Top() == "asd3");
 	}
 }
 
 SCENARIO("operator=(CStringStack&& other) function tests")
 {
+	//произвести действия после присваивания
 	SECTION("Check with empty stack")
 	{
 		CStringStack stack1;
 		CStringStack stack2;
 		CHECK_NOTHROW(stack2 = move(stack1));
+		CHECK_THROWS_AS(stack1.Pop(), runtime_error);
 	}
 
 	SECTION("Check stack with one element")
@@ -178,6 +194,7 @@ SCENARIO("operator=(CStringStack&& other) function tests")
 		stack1.Push("asd");
 		CHECK_NOTHROW(stack2 = move(stack1));
 		CHECK(stack2.Top() == "asd");
+		CHECK_THROWS_AS(stack1.Pop(), runtime_error);
 	}
 
 	SECTION("Check stack with any elements")
@@ -189,5 +206,16 @@ SCENARIO("operator=(CStringStack&& other) function tests")
 		stack1.Push("asd3");
 		CHECK_NOTHROW(stack2 = move(stack1));
 		CHECK(stack2.Top() == "asd3");
+		CHECK_THROWS_AS(stack1.Pop(), runtime_error);
+	}
+
+	SECTION("Check with copy into yourself")
+	{
+		CStringStack stack1;
+		stack1.Push("asd1");
+		stack1.Push("asd2");
+		stack1.Push("asd3");
+		CHECK_NOTHROW(stack1 = move(stack1));
+		CHECK(stack1.Top() == "asd3");
 	}
 }

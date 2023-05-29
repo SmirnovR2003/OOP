@@ -1,7 +1,5 @@
-﻿  CStringStack.cpp
-  CMyStack_tests.cpp
-  Создание кода...
+﻿  CMyStack_tests.cpp
   CMyStack_tests.vcxproj -> C:\roman\C++\OOP\lab6\CStringStack\x64\Debug\CMyStack_tests.exe
   ===============================================================================
-  All tests passed (34 assertions in 7 test cases)
+  All tests passed (43 assertions in 7 test cases)
   
