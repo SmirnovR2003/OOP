@@ -45,7 +45,7 @@ public:
 
 	// очистка строки (строка становится снова нулевой длины)
 	void Clear();
-	//добавить friend
+
 	CMyString& operator=(CMyString const& other);
 
 	CMyString& operator=(CMyString&& other)noexcept;
@@ -58,8 +58,7 @@ public:
 
 	CMyString operator+=(CMyString const& other);
 
-	//два класса дл const и не const
-	class CConstIterator //почитать как делать итератор
+	class CConstIterator 
 	{
 		friend CMyString;
 
@@ -79,20 +78,18 @@ public:
 
 		reference operator*();
 
-		 CConstIterator operator++();
+		 CConstIterator& operator++();
 
 		 CConstIterator operator++(int);
 
-		 CConstIterator operator--();
+		 CConstIterator& operator--();
 
 		 CConstIterator operator--(int);
 
-		 //не size_t а ptrdiff_t
 		 friend CConstIterator operator+(std::ptrdiff_t count, const CConstIterator& other1);
 
 		 CConstIterator operator+(std::ptrdiff_t number)const;
 
-		//ptrdiff_t
 		 friend difference_type operator-(const CConstIterator& other1, const CConstIterator& other2);
 
 		 friend bool operator==(const CConstIterator& other1, const CConstIterator& other2);
@@ -107,7 +104,6 @@ public:
 
 		 friend bool operator>=(const CConstIterator& other1, const CConstIterator& other2);
 
-		 //ptrdiff_t
 		 reference operator[](std::ptrdiff_t number);
 
 	private:
@@ -121,11 +117,11 @@ public:
 	class CIterator : public CConstIterator 
 	{
 		friend CMyString;
-
+		//хранить CMyString*
 		CIterator(char* curr, char* first, char* last);
 
 	public:
-
+		//убрать typedef
 		typedef char iterator_type;
 		typedef std::random_access_iterator_tag iterator_category;
 		typedef iterator_type value_type;
@@ -139,9 +135,9 @@ public:
 
 		CIterator& operator++();
 
-		CIterator& operator++(int);
+		CIterator operator++(int);
 
-		CIterator operator--();
+		CIterator& operator--();
 
 		CIterator operator--(int);
 
@@ -151,7 +147,6 @@ public:
 
 		CIterator operator-(std::ptrdiff_t number)const;
 
-		//ptrdiff_t
 		friend difference_type operator-(const CIterator& other1, const CIterator& other2);
 
 		friend bool operator==(const CIterator& other1, const CIterator& other2);
@@ -185,13 +180,14 @@ public:
 	CConstIterator end()const;
 
 private:
-	//CMyString(char* data, std::ptrdiff_t length, std::ptrdiff_t capacity);
 
 	char* m_str = nullptr;
 
 	std::size_t m_length = 0;
 
 	std::size_t m_capacity = 0;
+
+	friend CMyString ConcatStrings(const char* s1, const char* s2, size_t length1, size_t length2);
 };
 
 inline std::ostream& operator<<(std::ostream& stream, CMyString const& other)
